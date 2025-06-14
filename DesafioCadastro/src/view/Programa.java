@@ -1,6 +1,5 @@
 package view;
 
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -14,13 +13,14 @@ public class Programa {
             System.out.println("3.Deletar um pet cadastrado");
             System.out.println("4.Listar todos os pets cadastrados");
             System.out.println("5.Listar pets por algum critério (idade, nome, raça)");
-            System.out.println("5.Sair");
+            System.out.println("6.Sair");
 
-            int op;
+            int op = 0;
 
             try {
                 op = sc.nextInt();
-                if (op <= 0) {
+                sc.nextLine();
+                if (op <= 0 || op > 6) {
                     throw new IllegalArgumentException("Digite uma ação Válida.");
                 }
 
@@ -33,3 +33,4 @@ public class Programa {
         }
     }
 }
+
