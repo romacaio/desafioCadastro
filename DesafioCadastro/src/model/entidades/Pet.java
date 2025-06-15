@@ -6,7 +6,7 @@ public class Pet {
     private Tipo tipo;
     private Sexo sexo;
     private Endereco endereco;
-    private Integer idade;
+    private Double idade;
     private Double peso;
     private String raca;
 
@@ -14,7 +14,7 @@ public class Pet {
 
     }
 
-    public Pet(String nome, Tipo tipo, Sexo sexo, Endereco endereco, int idade, double peso, String raca) {
+    public Pet(String nome, Tipo tipo, Sexo sexo, Endereco endereco, Double idade, Double peso, String raca) {
         this.nome = nome;
         this.tipo = tipo;
         this.sexo = sexo;
@@ -57,11 +57,11 @@ public class Pet {
     }
 
 
-    public Integer getIdade() {
+    public Double getIdade() {
         return idade;
     }
 
-    public void setIdade(Integer idade) {
+    public void setIdade(Double idade) {
         this.idade = idade;
     }
 
@@ -88,4 +88,5 @@ public class Pet {
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
+
 }

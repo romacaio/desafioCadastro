@@ -1,5 +1,7 @@
 package view;
 
+import model.services.CadastrarPet;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -29,6 +31,11 @@ public class Programa {
                 sc.nextLine();
             } catch (IllegalArgumentException e) {
                 System.out.println("Erro: " + e.getMessage());
+            }
+            switch (op) {
+                case 1:
+                    CadastrarPet.cadastrar();
+                    break;
             }
         }
     }

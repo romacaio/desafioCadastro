@@ -12,7 +12,7 @@ public class PetValidador {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(nomePet);
         boolean isNomeValido = matcher.matches();
-        if(isNomeValido == false){
+        if(!isNomeValido){
             throw new PetNomeInvalidoException("O nome do pet deve conter nome e sobrenome, apenas letras são permitidas.");
         }
     }
