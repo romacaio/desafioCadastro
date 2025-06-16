@@ -46,7 +46,7 @@ public class CadastrarPet {
                             pet.setTipo(tipo);
                             break;
                         } catch (IllegalArgumentException e) {
-                            System.out.println("Erro " + e.getMessage());
+                            System.out.println("Erro: " + e.getMessage());
                         }
                     }
                     break;
@@ -65,25 +65,39 @@ public class CadastrarPet {
                     }
                     break;
                 case 3:
+                    Endereco endereco = new Endereco();
                     while (true) {
                         System.out.println(linhas.get(i));
                         try {
                             System.out.print("Número da casa: ");
                             String numeroStr = sc.nextLine();
-                            Endereco endereco = new Endereco();
+
                             if (Pet.isVazio(numeroStr)) {
                                 endereco.setNumeroCasa(null);
                                 break;
                             }
                             Integer numero = Integer.valueOf(numeroStr);
                             endereco.setNumeroCasa(numero);
-
-                            System.out.print("Cidade: ");
+                            break;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Erro: Entrada inválida, digite apenas números.");
+                        }
+                    }
+                    while (true) {
+                        System.out.print("Cidade: ");
+                        try {
                             String cidade = sc.nextLine();
                             EnderecoValidador.validarEndereco(cidade);
                             endereco.setCidade(cidade);
+                            break;
 
-                            System.out.print("Rua: ");
+                        } catch (EnderecoInvalidoException e) {
+                            System.out.println("Erro: " + e.getMessage());
+                        }
+                    }
+                    while (true) {
+                        System.out.print("Rua: ");
+                        try {
                             String rua = sc.nextLine();
                             EnderecoValidador.validarEndereco(rua);
                             endereco.setRua(rua);
@@ -93,8 +107,6 @@ public class CadastrarPet {
 
                         } catch (EnderecoInvalidoException e) {
                             System.out.println("Erro: " + e.getMessage());
-                        } catch (NumberFormatException e) {
-                            System.out.println("Erro: Entrada inválida, digite apenas números.");
                         }
                     }
                     break;
@@ -156,7 +168,7 @@ public class CadastrarPet {
                             pet.setRaca(raca);
                             break;
 
-                        } catch (EnderecoInvalidoException e) {
+                        } catch (IllegalArgumentException e) {
                             System.out.println("Erro: " + e.getMessage());
                         }
                     }

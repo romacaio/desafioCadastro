@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class EnderecoValidador {
 
     public static void validarEndereco(String endereco) {
-        String regex = "^[^\\D]+$";
+        String regex = "^[\\p{L}\\s]+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(endereco);
         boolean isEnderecoValido = matcher.matches();

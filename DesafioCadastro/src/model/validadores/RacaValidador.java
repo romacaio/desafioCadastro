@@ -8,12 +8,12 @@ import java.util.regex.Pattern;
 public class RacaValidador {
 
     public static void validarRaca(String raca) {
-        String regex = "^[^\\p{L} ]+$";
+        String regex = "^[\\p{L}\\s]+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(raca);
-        boolean isPesoValido = matcher.matches();
-        if (!isPesoValido) {
-            throw new PesoInvalidoException("Digite um valor válido, Apenas letras são permitidas.");
+        boolean isRacaValida = matcher.matches();
+        if (!isRacaValida) {
+            throw new IllegalArgumentException("Digite um valor válido, Apenas letras são permitidas.");
         }
     }
 }
