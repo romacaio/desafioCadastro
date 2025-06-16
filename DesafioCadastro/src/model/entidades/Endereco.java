@@ -38,4 +38,13 @@ public class Endereco {
     public void setRua(String rua) {
         this.rua = rua;
     }
+
+    @Override
+    public String toString() {
+        if (numeroCasa == null) {
+            return "Rua " + Pet.NAO_INFORMADO + ", " + numeroCasa + ", " + cidade;
+        } else {
+            return "Rua " + rua + ", " + numeroCasa + ", " + cidade;
+        }
+    }
 }

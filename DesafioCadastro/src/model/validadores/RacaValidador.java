@@ -13,7 +13,7 @@ public class RacaValidador {
         Matcher matcher = pattern.matcher(raca);
         boolean isRacaValida = matcher.matches();
         if (!isRacaValida) {
-            throw new IllegalArgumentException("Digite um valor válido, Apenas letras são permitidas.");
+            throw new IllegalArgumentException("Digite um valor válido, apenas letras são permitidas.");
         }
     }
 }

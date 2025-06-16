@@ -1,7 +1,7 @@
 package model.entidades;
 
 public class Pet {
-    private static final String NAO_INFORMADO = "Não informado";
+    public static final String NAO_INFORMADO = "Não informado";
     private String nome;
     private Tipo tipo;
     private Sexo sexo;

@@ -5,6 +5,7 @@ import model.exceptions.EnderecoInvalidoException;
 import model.exceptions.IdadeInvalidaException;
 import model.exceptions.PesoInvalidoException;
 import model.exceptions.PetNomeInvalidoException;
+import model.io.FormularioFile;
 import model.validadores.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class CadastrarPet {
 
     public static Pet cadastrar() {
         Scanner sc = new Scanner(System.in);
-        List<String> linhas = File.criarFormulario();
+        List<String> linhas = FormularioFile.criarFormulario();
         Pet pet = new Pet();
         for (int i = 0; i < linhas.size(); i++) {
             switch (i) {

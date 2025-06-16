@@ -1,17 +1,17 @@
-package model.entidades;
+package model.io;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class File {
+public class FormularioFile {
 
     public static List<String> criarFormulario() {
         java.io.File pasta = new java.io.File("data");
         pasta.mkdir();
-        java.io.File formulario = new java.io.File(pasta, "formulario.txt");
+        java.io.File FormularioFile = new java.io.File(pasta, "formulario.txt");
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(formulario))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FormularioFile))) {
             bw.write("1 - Qual o nome e sobrenome do pet?");
             bw.newLine();
             bw.write("2 - Qual o tipo do pet (Cachorro/Gato)?");
@@ -31,7 +31,7 @@ public class File {
             e.printStackTrace();
         }
         List<String> linhas = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(formulario))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(FormularioFile))) {
             String linha;
             while ((linha = br.readLine()) != null) {
                 linhas.add(linha);

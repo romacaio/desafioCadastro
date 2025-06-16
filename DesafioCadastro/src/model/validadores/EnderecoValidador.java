@@ -13,7 +13,7 @@ public class EnderecoValidador {
         Matcher matcher = pattern.matcher(endereco);
         boolean isEnderecoValido = matcher.matches();
         if (!isEnderecoValido) {
-            throw new EnderecoInvalidoException("Digite um valor válido, Apenas letras são permitidas.");
+            throw new EnderecoInvalidoException("Digite um valor válido, apenas letras são permitidas.");
         }
     }
 }

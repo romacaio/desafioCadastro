@@ -1,5 +1,7 @@
 package view;
 
+import model.entidades.Pet;
+import model.io.RespostasFile;
 import model.services.CadastrarPet;
 
 import java.util.InputMismatchException;
@@ -8,8 +10,8 @@ import java.util.Scanner;
 public class Programa {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
-        while (true) {
+        Boolean continua = true;
+        while (continua) {
             System.out.println("1.Cadastrar um novo pet");
             System.out.println("2.Alterar os dados do pet cadastrado");
             System.out.println("3.Deletar um pet cadastrado");
@@ -34,9 +36,16 @@ public class Programa {
             }
             switch (op) {
                 case 1:
-                    CadastrarPet.cadastrar();
+                    Pet petCadastrado = CadastrarPet.cadastrar();
+                    RespostasFile.criarRespostas(petCadastrado);
                     break;
+                case 6:
+                    continua = false;
+                    sc.close();
+                    break;
+
             }
+
         }
     }
 }
