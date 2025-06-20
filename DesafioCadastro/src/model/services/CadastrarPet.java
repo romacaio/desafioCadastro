@@ -59,6 +59,7 @@ public class CadastrarPet {
                             if (sexo == null) {
                                 throw new IllegalArgumentException("Digite uma entrada válida, masculino ou feminino.");
                             }
+                            pet.setSexo(sexo);
                             break;
                         } catch (IllegalArgumentException e) {
                             System.out.println("Erro: " + e.getMessage());
@@ -126,6 +127,7 @@ public class CadastrarPet {
 
                             pet.setIdade(idade);
                             break;
+
                         } catch (IdadeInvalidaException e) {
                             System.out.println("Erro: " + e.getMessage());
                         } catch (NumberFormatException e) {
