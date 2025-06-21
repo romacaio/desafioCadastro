@@ -8,10 +8,12 @@ import model.exceptions.PetNomeInvalidoException;
 import model.io.FormularioFile;
 import model.validadores.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class CadastrarPet {
+    private static List<Pet> petsCadastrados = new ArrayList<>();
 
     public static Pet cadastrar() {
         Scanner sc = new Scanner(System.in);
@@ -179,6 +181,11 @@ public class CadastrarPet {
             }
         }
         sc.close();
+        petsCadastrados.add(pet);
         return pet;
+    }
+
+    public static List<Pet> getPetsCadastrados() {
+        return petsCadastrados;
     }
 }

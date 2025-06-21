@@ -1,7 +1,0 @@
-1 - Não informado
-2 - CACHORRO
-3 - MASCULIMO
-4 - Rua Não informado, null, Monteiro
-5 - Não informado
-6 - Não informado
-7 - Não informado

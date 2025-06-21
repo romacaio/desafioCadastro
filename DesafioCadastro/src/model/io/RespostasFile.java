@@ -57,7 +57,7 @@ public class RespostasFile {
             if (pet.getPeso() == null) {
                 bw.write("6 - " + Pet.NAO_INFORMADO);
             } else {
-                bw.write("6 - " + pet.getPeso() + " Kg");
+                bw.write("6 - " + pet.getPeso() + "Kg");
             }
 
             bw.newLine();
