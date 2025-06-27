@@ -1,5 +1,7 @@
 package model.entidades;
 
+import java.util.Locale;
+
 public class Pet {
     public static final String NAO_INFORMADO = "Não informado";
     private String nome;
@@ -89,4 +91,29 @@ public class Pet {
         this.endereco = endereco;
     }
 
+    @Override
+    public String toString() {
+
+        String nomeStr = (nome != null) ? nome : NAO_INFORMADO;
+        String pesoStr = (peso != null) ? String.format(Locale.US, "%.1f", peso) : NAO_INFORMADO;
+        String racaStr = (raca != null) ? raca : NAO_INFORMADO;
+        String numeroCasaStr = (getEndereco().getNumeroCasa() != null) ? getEndereco().getNumeroCasa().toString() : NAO_INFORMADO;
+        String cidadeStr = endereco.getCidade();
+        String ruaStr = endereco.getRua();
+
+        String idadeStr;
+        if (idade != null) {
+            if (idade < 1) {
+                int meses = (int) (idade * 12);
+                idadeStr = meses + " meses";
+            } else {
+                idadeStr = String.format(Locale.US, "%.1f anos", idade);
+            }
+        } else {
+            idadeStr = NAO_INFORMADO;
+        }
+
+        return String.format("%s - %s - %s - Rua %s, %s - Cidade %s - %s - %s - %s", nomeStr, tipo.getNomeRelatorio(), sexo.getNomeRelatorio(),
+                ruaStr, numeroCasaStr, cidadeStr, idadeStr, pesoStr, racaStr);
+    }
 }

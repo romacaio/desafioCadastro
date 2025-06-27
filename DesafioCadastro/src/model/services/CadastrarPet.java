@@ -23,58 +23,58 @@ public class CadastrarPet {
             switch (i) {
                 case 0:
                     while (true) {
-                        System.out.println(linhas.get(i));
+                        System.out.print(linhas.get(i) + " ");
                         try {
-                            String nome = sc.nextLine();
+                            String nome = sc.nextLine().trim();
                             if (Pet.isVazio(nome)) {
                                 pet.setNome(null);
                                 break;
                             }
-                            PetValidador.validarNome(nome);
+                            NomeValidador.validarNomeCadastro(nome);
                             pet.setNome(nome);
                             break;
                         } catch (PetNomeInvalidoException e) {
-                            System.out.println("Erro: " + e.getMessage());
+                            System.out.println("\nErro: " + e.getMessage());
                         }
                     }
                     break;
                 case 1:
                     while (true) {
-                        System.out.println(linhas.get(i));
+                        System.out.print(linhas.get(i) + " ");
                         try {
-                            Tipo tipo = Tipo.tipoPorNomeRelatorio(sc.nextLine());
+                            Tipo tipo = Tipo.tipoPorNomeRelatorio(sc.nextLine().trim());
                             if (tipo == null) {
                                 throw new IllegalArgumentException("Tipo Inexistente.");
                             }
                             pet.setTipo(tipo);
                             break;
                         } catch (IllegalArgumentException e) {
-                            System.out.println("Erro: " + e.getMessage());
+                            System.out.println("\nErro: " + e.getMessage());
                         }
                     }
                     break;
                 case 2:
                     while (true) {
-                        System.out.println(linhas.get(i));
+                        System.out.print(linhas.get(i) + " ");
                         try {
-                            Sexo sexo = Sexo.sexoPorNomeRelatorio(sc.nextLine());
+                            Sexo sexo = Sexo.sexoPorNomeRelatorio(sc.nextLine().trim());
                             if (sexo == null) {
                                 throw new IllegalArgumentException("Digite uma entrada válida, masculino ou feminino.");
                             }
                             pet.setSexo(sexo);
                             break;
                         } catch (IllegalArgumentException e) {
-                            System.out.println("Erro: " + e.getMessage());
+                            System.out.println("\nErro: " + e.getMessage());
                         }
                     }
                     break;
                 case 3:
                     Endereco endereco = new Endereco();
                     while (true) {
-                        System.out.println(linhas.get(i));
+                        System.out.print(linhas.get(i));
                         try {
-                            System.out.print("Número da casa: ");
-                            String numeroStr = sc.nextLine();
+                            System.out.print("\nNúmero da casa: ");
+                            String numeroStr = sc.nextLine().trim();
 
                             if (Pet.isVazio(numeroStr)) {
                                 endereco.setNumeroCasa(null);
@@ -84,13 +84,13 @@ public class CadastrarPet {
                             endereco.setNumeroCasa(numero);
                             break;
                         } catch (NumberFormatException e) {
-                            System.out.println("Erro: Entrada inválida, digite apenas números.");
+                            System.out.println("\nErro: Entrada inválida, digite apenas números.");
                         }
                     }
                     while (true) {
                         System.out.print("Cidade: ");
                         try {
-                            String cidade = sc.nextLine();
+                            String cidade = sc.nextLine().trim();
                             EnderecoValidador.validarEndereco(cidade);
                             endereco.setCidade(cidade);
                             break;
@@ -102,7 +102,7 @@ public class CadastrarPet {
                     while (true) {
                         System.out.print("Rua: ");
                         try {
-                            String rua = sc.nextLine();
+                            String rua = sc.nextLine().trim();
                             EnderecoValidador.validarEndereco(rua);
                             endereco.setRua(rua);
 
@@ -110,15 +110,15 @@ public class CadastrarPet {
                             break;
 
                         } catch (EnderecoInvalidoException e) {
-                            System.out.println("Erro: " + e.getMessage());
+                            System.out.println("\nErro: " + e.getMessage());
                         }
                     }
                     break;
                 case 4:
                     while (true) {
-                        System.out.println(linhas.get(i));
+                        System.out.print(linhas.get(i) + " ");
                         try {
-                            String idadeStr = sc.nextLine();
+                            String idadeStr = sc.nextLine().trim();
                             idadeStr = idadeStr.replace(",", ".");
                             if (Pet.isVazio(idadeStr)) {
                                 pet.setIdade(null);
@@ -133,15 +133,15 @@ public class CadastrarPet {
                         } catch (IdadeInvalidaException e) {
                             System.out.println("Erro: " + e.getMessage());
                         } catch (NumberFormatException e) {
-                            System.out.println("Erro: Entrada inválida, digite apenas números.");
+                            System.out.println("\nErro: Entrada inválida, digite apenas números.");
                         }
                     }
                     break;
                 case 5:
                     while (true) {
-                        System.out.println(linhas.get(i));
+                        System.out.print(linhas.get(i) + " ");
                         try {
-                            String pesoStr = sc.nextLine();
+                            String pesoStr = sc.nextLine().trim();
                             pesoStr = pesoStr.replace(",", ".");
                             if (Pet.isVazio(pesoStr)) {
                                 pet.setPeso(null);
@@ -154,33 +154,34 @@ public class CadastrarPet {
                             break;
 
                         } catch (PesoInvalidoException e) {
-                            System.out.println("Erro: " + e.getMessage());
+                            System.out.println("\nErro: " + e.getMessage());
                         } catch (NumberFormatException e) {
-                            System.out.println("Erro: Entrada inválida, digite apenas números.");
+                            System.out.println("\nErro: Entrada inválida, digite apenas números.");
                         }
                     }
                     break;
                 case 6:
                     while (true) {
-                        System.out.println(linhas.get(i));
+                        System.out.print(linhas.get(i) + " ");
                         try {
-                            String raca = sc.nextLine();
+                            String raca = sc.nextLine().trim();
                             if (Pet.isVazio(raca)) {
                                 pet.setRaca(null);
+                                System.out.println();
                                 break;
                             }
                             RacaValidador.validarRaca(raca);
                             pet.setRaca(raca);
+                            System.out.println();
                             break;
 
                         } catch (IllegalArgumentException e) {
-                            System.out.println("Erro: " + e.getMessage());
+                            System.out.println("\nErro: " + e.getMessage());
                         }
                     }
                     break;
             }
         }
-        sc.close();
         petsCadastrados.add(pet);
         return pet;
     }
