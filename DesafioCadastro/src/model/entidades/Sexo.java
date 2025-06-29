@@ -1,8 +1,8 @@
 package model.entidades;
 
 public enum Sexo {
-    MASCULIMO("Masculino"),
-    FEMININO("Feminino");
+    MACHO("Macho"),
+    FEMEA("Femea");
 
     private String nomeRelatorio;
 

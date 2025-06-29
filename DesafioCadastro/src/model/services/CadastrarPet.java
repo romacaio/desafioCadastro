@@ -15,8 +15,8 @@ import java.util.Scanner;
 public class CadastrarPet {
     private static List<Pet> petsCadastrados = new ArrayList<>();
 
-    public static Pet cadastrar() {
-        Scanner sc = new Scanner(System.in);
+    public static Pet cadastrar(Scanner sc) {
+
         List<String> linhas = FormularioFile.criarFormulario();
         Pet pet = new Pet();
         for (int i = 0; i < linhas.size(); i++) {
@@ -59,7 +59,7 @@ public class CadastrarPet {
                         try {
                             Sexo sexo = Sexo.sexoPorNomeRelatorio(sc.nextLine().trim());
                             if (sexo == null) {
-                                throw new IllegalArgumentException("Digite uma entrada válida, masculino ou feminino.");
+                                throw new IllegalArgumentException("Digite uma entrada válida, Fêmea ou Macho.");
                             }
                             pet.setSexo(sexo);
                             break;
@@ -131,7 +131,7 @@ public class CadastrarPet {
                             break;
 
                         } catch (IdadeInvalidaException e) {
-                            System.out.println("Erro: " + e.getMessage());
+                            System.out.println("\nErro: " + e.getMessage());
                         } catch (NumberFormatException e) {
                             System.out.println("\nErro: Entrada inválida, digite apenas números.");
                         }

@@ -9,6 +9,7 @@ import java.util.Locale;
 
 public class RespostasFile {
 
+
     public static void criarRespostas(Pet pet) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmm");
         LocalDateTime now = LocalDateTime.now();
@@ -16,16 +17,18 @@ public class RespostasFile {
 
         File pasta = new File("petsCadastrados");
         pasta.mkdir();
-        File respostasFile;
 
+        File respostaFile;
         if (pet.getNome() == null) {
-            String nomePet = Pet.NAO_INFORMADO.replace(" ", "").replace("ã","a").toUpperCase();
-            respostasFile = new File(pasta, dataFormatada.concat("-" + nomePet + ".txt"));
+            String nomePet = Pet.NAO_INFORMADO.replace(" ", "").replace("ã", "a").toUpperCase();
+            respostaFile = new File(pasta, dataFormatada.concat("-" + nomePet + ".txt"));
+            pet.nomeArquivo = dataFormatada.concat("-" + nomePet + ".txt");
         } else {
             String nomePet = pet.getNome().replace(" ", "").toUpperCase();
-            respostasFile = new File(pasta, dataFormatada.concat("-" + nomePet + ".txt"));
+            respostaFile = new File(pasta, dataFormatada.concat("-" + nomePet + ".txt"));
+            pet.nomeArquivo = dataFormatada.concat("-" + nomePet + ".txt");
         }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(respostasFile))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(respostaFile))) {
             if (pet.getNome() == null) {
                 bw.write("1 - " + Pet.NAO_INFORMADO);
             } else {
@@ -39,6 +42,7 @@ public class RespostasFile {
             bw.write("3 - " + pet.getSexo());
 
             bw.newLine();
+
             bw.write("4 - " + pet.getEndereco());
 
             bw.newLine();
@@ -74,4 +78,10 @@ public class RespostasFile {
         }
     }
 
+    public static void excluirFile(Pet pet) {
+        String nomeArquivo = pet.nomeArquivo;
+        File pasta = new File("petsCadastrados");
+        File file = new File(pasta, nomeArquivo);
+        file.delete();
+    }
 }

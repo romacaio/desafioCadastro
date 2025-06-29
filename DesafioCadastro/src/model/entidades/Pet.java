@@ -1,5 +1,7 @@
 package model.entidades;
 
+import model.validadores.NomeValidador;
+
 import java.util.Locale;
 
 public class Pet {
@@ -11,6 +13,7 @@ public class Pet {
     private Double idade;
     private Double peso;
     private String raca;
+    public String nomeArquivo;
 
     public Pet() {
 
@@ -89,6 +92,14 @@ public class Pet {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public String getNomeArquivo() {
+        return nomeArquivo;
+    }
+
+    public void setNomeArquivo(String nomeArquivo) {
+        this.nomeArquivo = nomeArquivo;
     }
 
     @Override

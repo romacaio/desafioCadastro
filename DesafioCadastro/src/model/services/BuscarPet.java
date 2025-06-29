@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BuscarPet {
+    public static List<Pet> buscaPets = new ArrayList<>();
 
     public static void listarPetsCadastrados() {
         List<Pet> petsCadastrados = CadastrarPet.getPetsCadastrados();
@@ -130,6 +131,7 @@ public class BuscarPet {
                     throw new IllegalArgumentException("Tipo Inexistente.");
                 }
                 tipo = tipoPet.getNomeRelatorio();
+                System.out.println();
                 break;
             } catch (IllegalArgumentException e) {
                 System.out.println("\nErro: " + e.getMessage());
@@ -210,11 +212,14 @@ public class BuscarPet {
                     System.out.print("Sexo pet: ");
                     try {
                         Sexo sexo = Sexo.sexoPorNomeRelatorio(sc.nextLine().trim());
+                        if (sexo == null) {
+                            throw new IllegalArgumentException("Digite uma entrada válida, Fêmea ou Macho.");
+                        }
                         String sexoStr = sexo.getNomeRelatorio();
                         resultado = porSexo(tipo, sexoStr);
                         break;
                     } catch (IllegalArgumentException e) {
-                        System.out.println("Erro: " + e.getMessage());
+                        System.out.println("\nErro: " + e.getMessage());
                     }
                 }
                 break;
@@ -231,9 +236,9 @@ public class BuscarPet {
                         break;
 
                     } catch (IdadeInvalidaException e) {
-                        System.out.println("Erro: " + e.getMessage());
+                        System.out.println("\nErro: " + e.getMessage());
                     } catch (NumberFormatException e) {
-                        System.out.println("Erro: Entrada inválida, digite apenas números.");
+                        System.out.println("\nErro: Entrada inválida, digite apenas números.");
                     }
                 }
                 break;
@@ -249,9 +254,9 @@ public class BuscarPet {
                         resultado = porPeso(tipo, peso);
                         break;
                     } catch (PesoInvalidoException e) {
-                        System.out.println("Erro: " + e.getMessage());
+                        System.out.println("\nErro: " + e.getMessage());
                     } catch (NumberFormatException e) {
-                        System.out.println("Erro: Entrada inválida, digite apenas números.");
+                        System.out.println("\nErro: Entrada inválida, digite apenas números.");
                     }
                 }
                 break;
@@ -265,7 +270,7 @@ public class BuscarPet {
                         resultado = porRaca(tipo, raca);
                         break;
                     } catch (IllegalArgumentException e) {
-                        System.out.println("Erro: " + e.getMessage());
+                        System.out.println("\nErro: " + e.getMessage());
                     }
                 }
                 break;
@@ -276,6 +281,7 @@ public class BuscarPet {
                 resultado = porEndereco(tipo, endereco);
                 break;
         }
+        buscaPets = resultado;
         return resultado;
     }
 
@@ -290,5 +296,9 @@ public class BuscarPet {
             System.out.println((i + 1) + ". " + lista.get(i));
         }
         System.out.println();
+    }
+
+    public List<Pet> getBuscaPets() {
+        return buscaPets;
     }
 }

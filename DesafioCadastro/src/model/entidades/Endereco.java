@@ -42,7 +42,7 @@ public class Endereco {
     @Override
     public String toString() {
         if (numeroCasa == null) {
-            return "Rua " + Pet.NAO_INFORMADO + ", " + numeroCasa + ", " + cidade;
+            return "Rua " + rua + ", " + Pet.NAO_INFORMADO + ", " + cidade;
         } else {
             return "Rua " + rua + ", " + numeroCasa + ", " + cidade;
         }

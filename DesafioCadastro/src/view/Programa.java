@@ -3,8 +3,10 @@ package view;
 import model.entidades.Pet;
 import model.entidades.Tipo;
 import model.io.RespostasFile;
+import model.services.AlterarPet;
 import model.services.BuscarPet;
 import model.services.CadastrarPet;
+import model.services.DeletarPet;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -39,8 +41,14 @@ public class Programa {
             }
             switch (op) {
                 case 1:
-                    Pet petCadastrado = CadastrarPet.cadastrar();
+                    Pet petCadastrado = CadastrarPet.cadastrar(sc);
                     RespostasFile.criarRespostas(petCadastrado);
+                    break;
+                case 2:
+                    AlterarPet.alterar(sc);
+                    break;
+                case 3:
+                    DeletarPet.deletar(sc);
                     break;
                 case 5:
                     BuscarPet.menuDeBuscaPorCriterios(sc);
@@ -52,6 +60,7 @@ public class Programa {
                 case 6:
                     System.out.println("Saindo...");
                     continua = false;
+                    sc.close();
                     break;
             }
         }
