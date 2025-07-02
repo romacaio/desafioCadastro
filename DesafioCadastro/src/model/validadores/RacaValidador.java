@@ -1,7 +1,5 @@
 package model.validadores;
 
-import model.exceptions.PesoInvalidoException;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

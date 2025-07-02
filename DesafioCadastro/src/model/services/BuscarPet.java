@@ -11,7 +11,6 @@ import model.validadores.IdadeValidador;
 import model.validadores.NomeValidador;
 import model.validadores.PesoValidador;
 import model.validadores.RacaValidador;
-
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -49,8 +48,9 @@ public class BuscarPet {
         List<Pet> resultado = new ArrayList<>();
 
         for (Pet pet : listaFiltradaPorTipo) {
+
             String nomePetNormalizado = TextoUtil.normalizar(pet.getNome());
-            if (nomePetNormalizado.contains(nomeBuscaNormalizado)) {
+            if (pet.getNome() != null && nomePetNormalizado.contains(nomeBuscaNormalizado)) {
                 resultado.add(pet);
             }
         }
@@ -74,7 +74,7 @@ public class BuscarPet {
         List<Pet> listaFiltradaPorTipo = porTipo(tipo);
         List<Pet> resultado = new ArrayList<>();
         for (Pet pet : listaFiltradaPorTipo) {
-            if (pet.getIdade() == idadeBusca) {
+            if (pet.getIdade() != null && pet.getIdade() == idadeBusca) {
                 resultado.add(pet);
             }
         }
@@ -85,7 +85,7 @@ public class BuscarPet {
         List<Pet> listaFiltradaPorTipo = porTipo(tipo);
         List<Pet> resultado = new ArrayList<>();
         for (Pet pet : listaFiltradaPorTipo) {
-            if (pet.getPeso() == pesoBusca) {
+            if (pet.getPeso() != null && pet.getPeso() == pesoBusca) {
                 resultado.add(pet);
             }
         }
@@ -98,7 +98,7 @@ public class BuscarPet {
         List<Pet> resultado = new ArrayList<>();
         for (Pet pet : listaFiltradaPorTipo) {
             String racaPetNormalizada = TextoUtil.normalizar(pet.getRaca());
-            if (racaPetNormalizada.equals(racaBuscaNormalizada)) {
+            if (pet.getRaca() != null && racaPetNormalizada.equals(racaBuscaNormalizada)) {
                 resultado.add(pet);
             }
         }
@@ -153,15 +153,19 @@ public class BuscarPet {
 
             try {
                 System.out.print("Primeiro Critério: ");
-                String entrada1 = sc.nextLine();
+                String entrada1 = sc.nextLine().trim();
                 int criterio1 = Integer.parseInt(entrada1);
                 if (criterio1 <= 0 || criterio1 > 6) {
                     throw new IllegalArgumentException("Digite um critério válido.");
                 }
                 busca1 = BuscarPet.buscar(tipo, criterio1);
+                if (busca1.isEmpty()) {
+                    BuscarPet.exibirBusca(busca1);
+                    return;
+                }
 
                 System.out.print("Segundo Critério (pressione ENTER para ignorar): ");
-                String entrada2 = sc.nextLine();
+                String entrada2 = sc.nextLine().trim();
 
                 if (entrada2.isBlank()) {
                     System.out.println("Segundo critério ignorado.");
@@ -173,9 +177,16 @@ public class BuscarPet {
                     throw new IllegalArgumentException("Digite um critério válido e diferente do primeiro.");
                 }
                 busca2 = BuscarPet.buscar(tipo, criterio2);
+                if (busca2.isEmpty()) {
+                    BuscarPet.exibirBusca(busca2);
+                    return;
+                }
                 busca1.retainAll(busca2);
                 resultado = busca1;
                 BuscarPet.exibirBusca(resultado);
+                if (resultado.isEmpty()) {
+                    return;
+                }
                 break;
 
             } catch (NumberFormatException e) {
@@ -287,7 +298,7 @@ public class BuscarPet {
 
     public static void exibirBusca(List<Pet> lista) {
         if (lista.isEmpty()) {
-            System.out.println("Nenhum pet encontrado.");
+            System.out.println("\nNenhum Pet encontrado.");
             System.out.println();
             return;
         }

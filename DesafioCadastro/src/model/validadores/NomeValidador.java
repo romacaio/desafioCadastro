@@ -1,7 +1,6 @@
 package model.validadores;
 
 import model.exceptions.PetNomeInvalidoException;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

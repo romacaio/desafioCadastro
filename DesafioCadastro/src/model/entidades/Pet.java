@@ -2,6 +2,7 @@ package model.entidades;
 
 import model.validadores.NomeValidador;
 
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 public class Pet {
@@ -14,6 +15,7 @@ public class Pet {
     private Double peso;
     private String raca;
     public String nomeArquivo;
+    public LocalDateTime dateCadastro;
 
     public Pet() {
 
@@ -102,6 +104,14 @@ public class Pet {
         this.nomeArquivo = nomeArquivo;
     }
 
+    public LocalDateTime getDateCadastro() {
+        return dateCadastro;
+    }
+
+    public void setDateCadastro(LocalDateTime dateCadastro) {
+        this.dateCadastro = dateCadastro;
+    }
+
     @Override
     public String toString() {
 
@@ -114,9 +124,12 @@ public class Pet {
 
         String idadeStr;
         if (idade != null) {
+            double doubleIdade = idade;
             if (idade < 1) {
                 int meses = (int) (idade * 12);
                 idadeStr = meses + " meses";
+            } else if (doubleIdade % 1 == 0) {
+                idadeStr = (int) doubleIdade + " anos";
             } else {
                 idadeStr = String.format(Locale.US, "%.1f anos", idade);
             }

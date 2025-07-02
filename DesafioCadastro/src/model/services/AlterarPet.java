@@ -7,30 +7,33 @@ import model.exceptions.PesoInvalidoException;
 import model.exceptions.PetNomeInvalidoException;
 import model.io.RespostasFile;
 import model.validadores.*;
-
-import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class AlterarPet {
     public static void alterar(Scanner sc) {
+        BuscarPet.buscaPets.clear();
         BuscarPet.menuDeBuscaPorCriterios(sc);
-        List<Pet> busca = BuscarPet.buscaPets;
-        System.out.println("Digite o número correspondente ao pet que você deseja alterar:");
-        System.out.print("Número do pet: ");
-
+        if (BuscarPet.buscaPets.isEmpty()) {
+            return;
+        }
         int numero = 0;
-        try {
-            String numeroStr = sc.nextLine();
-            numero = Integer.parseInt(numeroStr);
-            if (numero < 1 || numero > busca.size()) {
-                throw new IllegalArgumentException("Digite um número correspondente válido.");
+        while (true) {
+            System.out.println("Digite o número correspondente ao pet que você deseja alterar");
+            System.out.print("Número do pet: ");
+            try {
+                String numeroStr = sc.nextLine().trim();
+                numero = Integer.parseInt(numeroStr);
+                if (numero < 1 || numero > BuscarPet.buscaPets.size()) {
+                    throw new IllegalArgumentException("Digite um número correspondente válido.");
+                }
+                System.out.println();
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("\nErro: Digite apenas números.");
+            } catch (IllegalArgumentException e) {
+                System.out.println("\nErro: " + e.getMessage());
             }
-            System.out.println();
-        } catch (NumberFormatException e) {
-            System.out.println("\nErro: Digite apenas números.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("\nErro: " + e.getMessage());
         }
 
         Boolean continua = true;
@@ -46,24 +49,30 @@ public class AlterarPet {
             System.out.print("Selecione o que deseja alterar: ");
 
             int op = 0;
-            Pet petSelecionado = null;
+
             try {
-                String opStr = sc.nextLine();
+                String opStr = sc.nextLine().trim();
                 op = Integer.parseInt(opStr);
                 if (op > 6 || op < 1) {
                     throw new IllegalArgumentException("Digite uma ação válida.");
                 }
-                petSelecionado = BuscarPet.buscaPets.get(numero - 1);
                 System.out.println();
             } catch (NumberFormatException e) {
                 System.out.println("\nErro: Digite apenas números.");
+                continue;
             } catch (IllegalArgumentException e) {
                 System.out.println("\nErro: " + e.getMessage());
+                continue;
             }
+            Pet petSelecionado = BuscarPet.buscaPets.get(numero - 1);
             switch (op) {
                 case 1:
+                    if (petSelecionado.getEndereco().getNumeroCasa() == null) {
+                        System.out.println("O nome atual do Pet selecionado é: " + Pet.NAO_INFORMADO);
+                    } else {
+                        System.out.println("O nome atual do Pet selecionado é: " + petSelecionado.getNome());
+                    }
                     while (true) {
-                        System.out.println("O nome atual do petSelecionado é: " + petSelecionado.getNome());
                         System.out.print("Informe o novo nome que deseja atribuir: ");
                         try {
                             String novoNome = sc.nextLine().trim();
@@ -80,18 +89,18 @@ public class AlterarPet {
                     }
                     break;
                 case 2:
+                    System.out.println("Endereço atual do Pet selecionado:");
+                    if (petSelecionado.getEndereco().getNumeroCasa() == null) {
+                        System.out.println("Número da casa: " + Pet.NAO_INFORMADO);
+                    } else {
+                        System.out.println("Número da casa: " + petSelecionado.getEndereco().getNumeroCasa());
+                    }
+                    System.out.println("Rua: " + petSelecionado.getEndereco().getRua());
+                    System.out.println("Cidade: " + petSelecionado.getEndereco().getCidade());
+                    System.out.print("Digite o novo número da casa: ");
                     while (true) {
-                        System.out.println("Endereço atual do petSelecionado:");
-                        if (petSelecionado.getEndereco().getNumeroCasa() == null) {
-                            System.out.println("Número da casa: " + Pet.NAO_INFORMADO);
-                        } else {
-                            System.out.println("Número da casa: " + petSelecionado.getEndereco().getNumeroCasa());
-                        }
-                        System.out.println("Rua: " + petSelecionado.getEndereco().getRua());
-                        System.out.println("Cidade: " + petSelecionado.getEndereco().getCidade());
-                        System.out.print("Digite o novo número da casa: ");
                         try {
-                            String numeroCasaStr = sc.nextLine();
+                            String numeroCasaStr = sc.nextLine().trim();
                             int numeroCasa = Integer.parseInt(numeroCasaStr);
                             petSelecionado.getEndereco().setNumeroCasa(numeroCasa);
                             break;
@@ -102,7 +111,7 @@ public class AlterarPet {
                     while (true) {
                         System.out.print("Digite a nova rua: ");
                         try {
-                            String ruaStr = sc.nextLine();
+                            String ruaStr = sc.nextLine().trim();
                             EnderecoValidador.validarEndereco(ruaStr);
                             petSelecionado.getEndereco().setRua(ruaStr);
                             break;
@@ -113,9 +122,9 @@ public class AlterarPet {
                     while (true) {
                         System.out.print("Digite a nova cidade: ");
                         try {
-                            String cidadeStr = sc.nextLine();
+                            String cidadeStr = sc.nextLine().trim();
                             EnderecoValidador.validarEndereco(cidadeStr);
-                            petSelecionado.getEndereco().setRua(cidadeStr);
+                            petSelecionado.getEndereco().setCidade(cidadeStr);
                             RespostasFile.excluirFile(petSelecionado);
                             RespostasFile.criarRespostas(petSelecionado);
                             System.out.println("Endereço do Pet alterado com sucesso!");
@@ -127,16 +136,16 @@ public class AlterarPet {
                     }
                     break;
                 case 3:
+                    if (petSelecionado.getIdade() == null) {
+                        System.out.println("Idade atual do Pet selecionado: " + Pet.NAO_INFORMADO);
+                    } else if (petSelecionado.getIdade() < 1) {
+                        int meses = (int) (petSelecionado.getIdade() * 12);
+                        System.out.println("Idade atual do Pet selecionado: " + meses + " meses");
+                    } else {
+                        System.out.println("Idade atual do Pet selecionado: " + petSelecionado.getIdade() + " anos");
+                    }
                     while (true) {
-                        if (petSelecionado.getIdade() == null) {
-                            System.out.println("Idade atual do petSelecionado: " + Pet.NAO_INFORMADO);
-                        } else if (petSelecionado.getIdade() < 1) {
-                            int meses = (int) (petSelecionado.getIdade() * 12);
-                            System.out.println("Idade atual do petSelecionado: " + meses + " meses");
-                        } else {
-                            System.out.println("Idade atual do petSelecionado: " + petSelecionado.getIdade() + " anos");
-                        }
-                        System.out.print("Digite a nova idade do petSelecionado: ");
+                        System.out.print("Digite a nova idade do Pet selecionado: ");
                         try {
                             String idadeStr = sc.nextLine().trim().replace(",", ".");
                             double idade = Double.parseDouble(idadeStr);
@@ -156,13 +165,13 @@ public class AlterarPet {
                     }
                     break;
                 case 4:
+                    if (petSelecionado.getPeso() == null) {
+                        System.out.println("Peso atual do Pet selecionado: " + Pet.NAO_INFORMADO);
+                    } else {
+                        System.out.println("Peso atual do Pet selecionado: " + String.format(Locale.US, "%.1f", petSelecionado.getPeso()) + " Kg");
+                    }
+                    System.out.print("Digite o novo peso do Pet selecionado: ");
                     while (true) {
-                        if (petSelecionado.getPeso() == null) {
-                            System.out.println("Peso atual do petSelecionado: " + Pet.NAO_INFORMADO);
-                        } else {
-                            System.out.println("Peso atual do petSelecionado: " + String.format(Locale.US, "%.1f", petSelecionado.getPeso()) + " Kg");
-                        }
-                        System.out.print("Digite o novo peso do petSelecionado: ");
                         try {
                             String pesoStr = sc.nextLine().trim().replace(",", ".");
                             double peso = Double.parseDouble(pesoStr);
@@ -181,15 +190,15 @@ public class AlterarPet {
                     }
                     break;
                 case 5:
+                    if (petSelecionado.getRaca() == null) {
+                        System.out.println("Raça atual do Pet selecionado: " + Pet.NAO_INFORMADO);
+                    } else {
+                        System.out.println("Raça atual do Pet selecionado: " + petSelecionado.getRaca());
+                    }
                     while (true) {
-                        if (petSelecionado.getRaca() == null) {
-                            System.out.println("Raça atual do petSelecionado: " + Pet.NAO_INFORMADO);
-                        } else {
-                            System.out.println("Raça atual do petSelecionado: " + petSelecionado.getRaca());
-                        }
                         System.out.print("Digite a nova raca do Pet: ");
                         try {
-                            String raca = sc.nextLine();
+                            String raca = sc.nextLine().trim();
                             RacaValidador.validarRaca(raca);
                             petSelecionado.setRaca(raca);
                             RespostasFile.excluirFile(petSelecionado);

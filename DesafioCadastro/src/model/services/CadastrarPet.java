@@ -7,7 +7,7 @@ import model.exceptions.PesoInvalidoException;
 import model.exceptions.PetNomeInvalidoException;
 import model.io.FormularioFile;
 import model.validadores.*;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -59,7 +59,7 @@ public class CadastrarPet {
                         try {
                             Sexo sexo = Sexo.sexoPorNomeRelatorio(sc.nextLine().trim());
                             if (sexo == null) {
-                                throw new IllegalArgumentException("Digite uma entrada válida, Fêmea ou Macho.");
+                                throw new IllegalArgumentException("Digite uma entrada válida, (Fêmea/Macho).");
                             }
                             pet.setSexo(sexo);
                             break;
@@ -182,6 +182,7 @@ public class CadastrarPet {
                     break;
             }
         }
+        pet.setDateCadastro(LocalDateTime.now());
         petsCadastrados.add(pet);
         return pet;
     }

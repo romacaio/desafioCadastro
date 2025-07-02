@@ -3,29 +3,33 @@ package model.services;
 import model.entidades.Pet;
 import model.io.RespostasFile;
 import model.util.TextoUtil;
-
-import java.util.List;
 import java.util.Scanner;
 
 public class DeletarPet {
     public static void deletar(Scanner sc) {
+        BuscarPet.buscaPets.clear();
         BuscarPet.menuDeBuscaPorCriterios(sc);
-        List<Pet> busca = BuscarPet.buscaPets;
-        System.out.println("Digite o número correspondente ao pet que você deseja Deletar: ");
-        System.out.print("Número do pet: ");
-
+        if (BuscarPet.buscaPets.isEmpty()) {
+            return;
+        }
         int numero = 0;
-        try {
-            String numeroStr = sc.nextLine();
-            numero = Integer.parseInt(numeroStr);
-            if (numero < 1 || numero > busca.size()) {
-                throw new IllegalArgumentException("Digite um número correspondente válido.");
+        while (true) {
+            System.out.println("Digite o número correspondente ao pet que você deseja Deletar: ");
+            System.out.print("Número do pet: ");
+
+            try {
+                String numeroStr = sc.nextLine();
+                numero = Integer.parseInt(numeroStr);
+                if (numero < 1 || numero > BuscarPet.buscaPets.size()) {
+                    throw new IllegalArgumentException("Digite um número correspondente válido.");
+                }
+                System.out.println();
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("\nErro: Digite apenas números.");
+            } catch (IllegalArgumentException e) {
+                System.out.println("\nErro: " + e.getMessage());
             }
-            System.out.println();
-        } catch (NumberFormatException e) {
-            System.out.println("\nErro: Digite apenas números.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("\nErro: " + e.getMessage());
         }
         Pet petSelecionado = BuscarPet.buscaPets.get(numero - 1);
         while (true) {

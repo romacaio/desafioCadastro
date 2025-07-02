@@ -1,8 +1,10 @@
 package model.entidades;
 
+import model.util.TextoUtil;
+
 public enum Sexo {
     MACHO("Macho"),
-    FEMEA("Femea");
+    FEMEA("Fêmea");
 
     private String nomeRelatorio;
 
@@ -18,7 +20,6 @@ public enum Sexo {
         }
         return null;
     }
-
 
     public String getNomeRelatorio() {
         return nomeRelatorio;

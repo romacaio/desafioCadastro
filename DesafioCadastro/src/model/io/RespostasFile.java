@@ -12,8 +12,7 @@ public class RespostasFile {
 
     public static void criarRespostas(Pet pet) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmm");
-        LocalDateTime now = LocalDateTime.now();
-        String dataFormatada = now.format(dtf);
+        String dataFormatada = pet.getDateCadastro().format(dtf);
 
         File pasta = new File("petsCadastrados");
         pasta.mkdir();
@@ -49,11 +48,14 @@ public class RespostasFile {
             if (pet.getIdade() == null) {
                 bw.write("5 - " + Pet.NAO_INFORMADO);
             } else {
-                if (pet.getIdade() < 1) {
-                    int meses = (int) (pet.getIdade() * 12);
+                double idade = pet.getIdade();
+                if (idade < 1) {
+                    int meses = (int) (idade * 12);
                     bw.write("5 - " + meses + " meses");
+                } else if (idade % 1 == 0) {
+                    bw.write("5 - " + (int) idade + " anos");
                 } else {
-                    bw.write("5 - " + String.format(Locale.US, "%.1f", pet.getIdade()) + " anos");
+                    bw.write("5 - " + String.format(Locale.US, "%.1f", idade) + " anos");
                 }
             }
 

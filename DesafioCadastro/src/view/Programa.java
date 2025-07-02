@@ -1,15 +1,11 @@
 package view;
 
 import model.entidades.Pet;
-import model.entidades.Tipo;
 import model.io.RespostasFile;
 import model.services.AlterarPet;
 import model.services.BuscarPet;
 import model.services.CadastrarPet;
 import model.services.DeletarPet;
-
-import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 public class Programa {
@@ -27,15 +23,15 @@ public class Programa {
             int op = 0;
 
             try {
-                op = sc.nextInt();
-                sc.nextLine();
+                String opStr = sc.nextLine().trim();
+                op = Integer.parseInt(opStr);
                 if (op <= 0 || op > 6) {
                     throw new IllegalArgumentException("Digite uma ação Válida.");
+
                 }
 
-            } catch (InputMismatchException e) {
+            } catch (NumberFormatException e) {
                 System.out.println("\nErro: Digite apenas números.");
-                sc.nextLine();
             } catch (IllegalArgumentException e) {
                 System.out.println("\nErro: " + e.getMessage());
             }
