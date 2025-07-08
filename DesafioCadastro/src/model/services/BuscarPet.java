@@ -1,25 +1,133 @@
 package model.services;
 
+import model.entidades.Endereco;
 import model.entidades.Pet;
 import model.entidades.Sexo;
 import model.entidades.Tipo;
 import model.exceptions.IdadeInvalidaException;
 import model.exceptions.PesoInvalidoException;
 import model.exceptions.PetNomeInvalidoException;
+import model.io.RespostasFile;
 import model.util.TextoUtil;
 import model.validadores.IdadeValidador;
 import model.validadores.NomeValidador;
 import model.validadores.PesoValidador;
 import model.validadores.RacaValidador;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+
+import java.io.*;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class BuscarPet {
     public static List<Pet> buscaPets = new ArrayList<>();
 
+    public static void buscaPetsFiles() {
+        File pasta = new File("petsCadastrados");
+        File[] filesCadastro = pasta.listFiles();
+
+        if (filesCadastro == null || filesCadastro.length == 0) {
+            return;
+        }
+
+        for (int i = 0; i < filesCadastro.length; i++) {
+            if (filesCadastro[i].getName().endsWith(".txt")) {
+                try (BufferedReader br = new BufferedReader(new FileReader(filesCadastro[i]))) {
+
+                    String nome = br.readLine().split("-")[1].trim();
+                    if (nome.equals(Pet.NAO_INFORMADO)) {
+                        nome = null;
+                    }
+                    String tipoStr = br.readLine().split("-")[1].trim();
+                    Tipo tipo;
+                    if (tipoStr.equals("CACHORRO")) {
+                        tipo = Tipo.CACHORRO;
+                    } else {
+                        tipo = Tipo.GATO;
+                    }
+                    String sexoStr = br.readLine().split("-")[1].trim();
+                    Sexo sexo;
+                    if (sexoStr.equals("MACHO")) {
+                        sexo = Sexo.MACHO;
+                    } else {
+                        sexo = Sexo.FEMEA;
+                    }
+                    String enderecoStr = br.readLine().split("-")[1].trim();
+                    String idadeStr = br.readLine().split("-")[1].trim();
+                    Double idade;
+                    if (idadeStr.equals(Pet.NAO_INFORMADO)) {
+                        idade = null;
+                    } else if (idadeStr.contains("meses")) {
+                        String mesesStr = idadeStr.replace("meses", "").trim();
+                        double meses = Double.parseDouble(mesesStr);
+                        idade = meses / 12;
+                    } else {
+                        String idadeSemAnos = idadeStr.replace("anos", "").trim();
+                        idade = Double.parseDouble(idadeSemAnos);
+                    }
+                    String pesoStr = br.readLine().split("-")[1].replace("Kg", "").trim();
+                    Double peso;
+                    if (pesoStr.equals(Pet.NAO_INFORMADO)) {
+                        peso = null;
+                    } else {
+                        peso = Double.parseDouble(pesoStr);
+                    }
+                    String raca = br.readLine().split("-")[1].trim();
+                    if (raca.equals(Pet.NAO_INFORMADO)) {
+                        raca = null;
+                    }
+
+                    String dateCadastroStr = br.readLine().split("-")[1].trim();
+                    LocalDateTime dateCadastro = LocalDateTime.parse(dateCadastroStr, RespostasFile.padraoData);
+
+                    String rua = enderecoStr.split(",")[0].replace("Rua", "").trim();
+                    String numeroCasaStr = enderecoStr.split(",")[1].trim();
+                    Integer numeroCasa;
+                    if (numeroCasaStr.equals(Pet.NAO_INFORMADO)) {
+                        numeroCasa = null;
+                    } else {
+                        numeroCasa = Integer.parseInt(numeroCasaStr);
+                    }
+                    String cidade = enderecoStr.split(",")[2].trim();
+
+                    Endereco endereco = new Endereco(numeroCasa, cidade, rua);
+                    Pet pet = new Pet(nome, tipo, sexo, endereco, idade, peso, raca);
+                    pet.setDateCadastro(dateCadastro);
+
+                    if (!petExiste(pet)) {
+                        CadastrarPet.getPetsCadastrados().add(pet);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static boolean petExiste(Pet pet) {
+        List<Pet> petsCadastrados = CadastrarPet.getPetsCadastrados();
+        for (Pet p : petsCadastrados) {
+            boolean isNomesIguais = (pet.getNome() == null || p.getNome() == null) || pet.getNome().equalsIgnoreCase(p.getNome());
+            boolean isTiposIguais = (pet.getTipo() == p.getTipo());
+            boolean isSexosIguais = pet.getSexo() == p.getSexo();
+
+            Endereco enderecop1 = pet.getEndereco();
+            Endereco enderecop2 = p.getEndereco();
+
+            boolean isRuasIguais = (enderecop1.getRua().equalsIgnoreCase(enderecop2.getRua()));
+            boolean isCidadesIguais = (enderecop1.getCidade().equalsIgnoreCase(enderecop2.getCidade()));
+            boolean isNumerosIguais = (enderecop1.getNumeroCasa() == null || enderecop2.getNumeroCasa() == null) || enderecop1.getNumeroCasa()
+                    .equals(enderecop2.getNumeroCasa());
+
+            if (isNomesIguais && isTiposIguais && isSexosIguais && isRuasIguais && isCidadesIguais && isNumerosIguais) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void listarPetsCadastrados() {
+        BuscarPet.buscaPetsFiles();
         List<Pet> petsCadastrados = CadastrarPet.getPetsCadastrados();
         if (petsCadastrados.isEmpty()) {
             System.out.println("Nenhum Pet cadastrado.");
@@ -120,6 +228,7 @@ public class BuscarPet {
     }
 
     public static void menuDeBuscaPorCriterios(Scanner sc) {
+        BuscarPet.buscaPetsFiles();
         String tipo;
         System.out.println("BUSCAR PET CADASTRADO");
         System.out.println("----------------------------------");

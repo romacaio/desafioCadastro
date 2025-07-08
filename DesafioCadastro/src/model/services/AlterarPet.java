@@ -7,12 +7,12 @@ import model.exceptions.PesoInvalidoException;
 import model.exceptions.PetNomeInvalidoException;
 import model.io.RespostasFile;
 import model.validadores.*;
+
 import java.util.Locale;
 import java.util.Scanner;
 
 public class AlterarPet {
     public static void alterar(Scanner sc) {
-        BuscarPet.buscaPets.clear();
         BuscarPet.menuDeBuscaPorCriterios(sc);
         if (BuscarPet.buscaPets.isEmpty()) {
             return;
@@ -67,7 +67,7 @@ public class AlterarPet {
             Pet petSelecionado = BuscarPet.buscaPets.get(numero - 1);
             switch (op) {
                 case 1:
-                    if (petSelecionado.getEndereco().getNumeroCasa() == null) {
+                    if (petSelecionado.getNome() == null) {
                         System.out.println("O nome atual do Pet selecionado é: " + Pet.NAO_INFORMADO);
                     } else {
                         System.out.println("O nome atual do Pet selecionado é: " + petSelecionado.getNome());
@@ -77,8 +77,8 @@ public class AlterarPet {
                         try {
                             String novoNome = sc.nextLine().trim();
                             NomeValidador.validarNomeCadastro(novoNome);
-                            petSelecionado.setNome(novoNome);
                             RespostasFile.excluirFile(petSelecionado);
+                            petSelecionado.setNome(novoNome);
                             RespostasFile.criarRespostas(petSelecionado);
                             System.out.println("Nome do Pet alterado com sucesso!");
                             System.out.println();
@@ -89,7 +89,7 @@ public class AlterarPet {
                     }
                     break;
                 case 2:
-                    System.out.println("Endereço atual do Pet selecionado:");
+                    System.out.println("Endereço atual do Pet selecionado");
                     if (petSelecionado.getEndereco().getNumeroCasa() == null) {
                         System.out.println("Número da casa: " + Pet.NAO_INFORMADO);
                     } else {
@@ -97,12 +97,16 @@ public class AlterarPet {
                     }
                     System.out.println("Rua: " + petSelecionado.getEndereco().getRua());
                     System.out.println("Cidade: " + petSelecionado.getEndereco().getCidade());
-                    System.out.print("Digite o novo número da casa: ");
+                    System.out.print("\nDigite o novo número da casa: ");
+
+                    int numeroCasa;
+                    String ruaStr;
+                    String cidadeStr;
+
                     while (true) {
                         try {
                             String numeroCasaStr = sc.nextLine().trim();
-                            int numeroCasa = Integer.parseInt(numeroCasaStr);
-                            petSelecionado.getEndereco().setNumeroCasa(numeroCasa);
+                            numeroCasa = Integer.parseInt(numeroCasaStr);
                             break;
                         } catch (NumberFormatException e) {
                             System.out.println("\nErro: Digite um valor válido, apenas números são permitidas.");
@@ -111,9 +115,8 @@ public class AlterarPet {
                     while (true) {
                         System.out.print("Digite a nova rua: ");
                         try {
-                            String ruaStr = sc.nextLine().trim();
+                            ruaStr = sc.nextLine().trim();
                             EnderecoValidador.validarEndereco(ruaStr);
-                            petSelecionado.getEndereco().setRua(ruaStr);
                             break;
                         } catch (EnderecoInvalidoException e) {
                             System.out.println("\nErro: " + e.getMessage());
@@ -122,10 +125,14 @@ public class AlterarPet {
                     while (true) {
                         System.out.print("Digite a nova cidade: ");
                         try {
-                            String cidadeStr = sc.nextLine().trim();
+                            cidadeStr = sc.nextLine().trim();
                             EnderecoValidador.validarEndereco(cidadeStr);
-                            petSelecionado.getEndereco().setCidade(cidadeStr);
                             RespostasFile.excluirFile(petSelecionado);
+
+                            petSelecionado.getEndereco().setNumeroCasa(numeroCasa);
+                            petSelecionado.getEndereco().setRua(ruaStr);
+                            petSelecionado.getEndereco().setCidade(cidadeStr);
+
                             RespostasFile.criarRespostas(petSelecionado);
                             System.out.println("Endereço do Pet alterado com sucesso!");
                             System.out.println();
@@ -150,8 +157,8 @@ public class AlterarPet {
                             String idadeStr = sc.nextLine().trim().replace(",", ".");
                             double idade = Double.parseDouble(idadeStr);
                             IdadeValidador.validarIdade(idade);
-                            petSelecionado.setIdade(idade);
                             RespostasFile.excluirFile(petSelecionado);
+                            petSelecionado.setIdade(idade);
                             RespostasFile.criarRespostas(petSelecionado);
                             System.out.println("Idade do Pet alterado com sucesso!");
                             System.out.println();
@@ -176,8 +183,8 @@ public class AlterarPet {
                             String pesoStr = sc.nextLine().trim().replace(",", ".");
                             double peso = Double.parseDouble(pesoStr);
                             PesoValidador.validarPeso(peso);
-                            petSelecionado.setPeso(peso);
                             RespostasFile.excluirFile(petSelecionado);
+                            petSelecionado.setPeso(peso);
                             RespostasFile.criarRespostas(petSelecionado);
                             System.out.println("Peso do Pet alterado com sucesso!");
                             System.out.println();
@@ -200,8 +207,8 @@ public class AlterarPet {
                         try {
                             String raca = sc.nextLine().trim();
                             RacaValidador.validarRaca(raca);
-                            petSelecionado.setRaca(raca);
                             RespostasFile.excluirFile(petSelecionado);
+                            petSelecionado.setRaca(raca);
                             RespostasFile.criarRespostas(petSelecionado);
                             System.out.println("Raça do Pet alterada com sucesso!");
                             break;

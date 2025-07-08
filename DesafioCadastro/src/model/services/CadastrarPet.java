@@ -7,6 +7,7 @@ import model.exceptions.PesoInvalidoException;
 import model.exceptions.PetNomeInvalidoException;
 import model.io.FormularioFile;
 import model.validadores.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,11 @@ public class CadastrarPet {
     public static Pet cadastrar(Scanner sc) {
 
         List<String> linhas = FormularioFile.criarFormulario();
+        BuscarPet.buscaPetsFiles();
+
         Pet pet = new Pet();
+
+        cadastro:
         for (int i = 0; i < linhas.size(); i++) {
             switch (i) {
                 case 0:
@@ -59,7 +64,7 @@ public class CadastrarPet {
                         try {
                             Sexo sexo = Sexo.sexoPorNomeRelatorio(sc.nextLine().trim());
                             if (sexo == null) {
-                                throw new IllegalArgumentException("Digite uma entrada válida, (Fêmea/Macho).");
+                                throw new IllegalArgumentException("Digite uma entrada válida (Fêmea/Macho)");
                             }
                             pet.setSexo(sexo);
                             break;
@@ -105,8 +110,12 @@ public class CadastrarPet {
                             String rua = sc.nextLine().trim();
                             EnderecoValidador.validarEndereco(rua);
                             endereco.setRua(rua);
-
                             pet.setEndereco(endereco);
+                            if (BuscarPet.petExiste(pet)) {
+                                System.out.println("\nO Pet já foi cadastrado no sistema. Recomece o cadastro.\n");
+                                i = -1;
+                                continue cadastro;
+                            }
                             break;
 
                         } catch (EnderecoInvalidoException e) {

@@ -8,6 +8,5 @@ public class IdadeValidador {
         if (idade > 20 || idade < 0) {
             throw new IdadeInvalidaException("Idade inválida. O valor informado não pode ser negativo e não pode ultrapassar o limite máximo de 20 anos.");
         }
-
     }
 }

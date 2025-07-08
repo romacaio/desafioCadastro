@@ -3,11 +3,11 @@ package model.services;
 import model.entidades.Pet;
 import model.io.RespostasFile;
 import model.util.TextoUtil;
+
 import java.util.Scanner;
 
 public class DeletarPet {
     public static void deletar(Scanner sc) {
-        BuscarPet.buscaPets.clear();
         BuscarPet.menuDeBuscaPorCriterios(sc);
         if (BuscarPet.buscaPets.isEmpty()) {
             return;
@@ -50,8 +50,6 @@ public class DeletarPet {
                 System.out.println("Digite uma resposta válida.");
                 System.out.println();
             }
-
         }
-
     }
 }
