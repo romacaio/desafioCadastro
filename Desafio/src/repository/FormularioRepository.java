@@ -1,14 +1,13 @@
 package repository;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FormularioRepository {
+    private static File file = new File("src\\repository\\formulario.txt");
 
     public void criarFormulario() {
-        File file = new File("src\\repository\\formulario.txt");
         if (!file.exists()) {
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
                 file.createNewFile();
@@ -31,5 +30,21 @@ public class FormularioRepository {
                 e.printStackTrace();
             }
         }
+    }
+
+    public List<String> lerFormulario() {
+        List<String> perguntas = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                perguntas.add(linha);
+            }
+            return perguntas;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
