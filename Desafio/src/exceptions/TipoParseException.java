@@ -3,7 +3,7 @@ package exceptions;
 public class TipoParseException extends IllegalArgumentException {
 
     public TipoParseException() {
-        System.out.println("Tipo inexistente");
+        super("Tipo inexistente!");
     }
 
     public TipoParseException(String mensagem) {

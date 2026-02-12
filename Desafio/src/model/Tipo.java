@@ -12,7 +12,7 @@ public enum Tipo {
         this.nomeUsual = nomeUsual;
     }
 
-    public Tipo parse(String tipoString) {
+    public static Tipo parse(String tipoString) {
         for (Tipo tipo : Tipo.values()) {
             if (tipoString.equalsIgnoreCase(tipo.nomeUsual)) {
                 return tipo;

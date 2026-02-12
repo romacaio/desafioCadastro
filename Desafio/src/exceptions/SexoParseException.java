@@ -3,7 +3,7 @@ package exceptions;
 public class SexoParseException extends IllegalArgumentException {
 
     public SexoParseException() {
-        System.out.println("Sexo inexistente");
+        super("Sexo inexistente!");
     }
 
     public SexoParseException(String mensagem) {

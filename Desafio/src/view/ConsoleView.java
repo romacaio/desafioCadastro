@@ -1,13 +1,18 @@
 package view;
 
+import repository.FormularioRepository;
+
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleView {
     private Scanner sc;
+    private List<String> perguntasFormulario;
 
-    public ConsoleView(Scanner sc) {
+    public ConsoleView(Scanner sc, FormularioRepository formulario) {
         this.sc = sc;
+        this.perguntasFormulario = formulario.lerFormulario();
     }
 
     public int exibirMenu() {
@@ -21,10 +26,25 @@ public class ConsoleView {
         System.out.print("Digite uma opção: ");
 
         try {
-            return sc.nextInt();
+            int op = sc.nextInt();
+            sc.nextLine();
+            return op;
         } catch (InputMismatchException e) {
             sc.nextLine();
             return -1;
         }
+    }
+
+    public String exibirPergunta(int index, Boolean apenasExibir) {
+        System.out.println(perguntasFormulario.get(index));
+        if (apenasExibir) {
+            return null;
+        }
+        return sc.nextLine();
+    }
+
+    public String exibirPerguntaEndereco(String perguntaEndereco) {
+        System.out.print(perguntaEndereco);
+        return sc.nextLine();
     }
 }

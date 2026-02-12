@@ -12,7 +12,7 @@ public enum Sexo {
         this.nomeUsual = nomeUsual;
     }
 
-    public Sexo parse(String sexoString) {
+    public static Sexo parse(String sexoString) {
         for (Sexo sexo : Sexo.values()) {
             if (sexoString.equalsIgnoreCase(sexo.nomeUsual)) {
                 return sexo;
