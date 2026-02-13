@@ -5,16 +5,19 @@ import model.Endereco;
 import model.Pet;
 import model.Sexo;
 import model.Tipo;
+import repository.PetRepository;
 import service.PetValidator;
 import view.ConsoleView;
 
 public class PetController {
     private ConsoleView consoleView;
     private PetValidator petValidator;
+    private PetRepository petRepository;
 
-    public PetController(ConsoleView consoleView, PetValidator petValidator) {
+    public PetController(ConsoleView consoleView, PetValidator petValidator, PetRepository petRepository) {
         this.consoleView = consoleView;
         this.petValidator = petValidator;
+        this.petRepository = petRepository;
     }
 
     public void processarMenu() {
@@ -24,7 +27,7 @@ public class PetController {
             switch (op) {
                 case 1 -> {
                     System.out.println("\n## CADASTRO ##");
-                    cadastro();
+                    petRepository.salvarPet(cadastro());
                 }
                 //case 2 ->
                 //case 3 ->
@@ -99,7 +102,7 @@ public class PetController {
                 System.out.println(e.getMessage() + "\n");
                 continue;
             } catch (NumberFormatException e) {
-                System.out.println("Numéro Inválido! Apenas dígitos são permitidos\n");
+                System.out.println("Numéro Inválido! Apenas dígitos são permitidos.\n");
                 continue;
             }
             break;
@@ -114,7 +117,7 @@ public class PetController {
                 System.out.println(e.getMessage() + "\n");
                 continue;
             } catch (NumberFormatException e) {
-                System.out.println("Idade inválida! Apenas números são permitidos\n");
+                System.out.println("Idade inválida! Apenas números são permitidos.\n");
                 continue;
             }
             break;
@@ -129,7 +132,7 @@ public class PetController {
                 System.out.println(e.getMessage() + "\n");
                 continue;
             } catch (NumberFormatException e) {
-                System.out.println("Peso inválido! Apenas números são permitidos\n");
+                System.out.println("Peso inválido! Apenas números são permitidos.\n");
                 continue;
             }
             break;

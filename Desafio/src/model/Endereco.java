@@ -15,7 +15,7 @@ public class Endereco {
         this.rua = rua;
     }
 
-    public int getNumero() {
+    public Integer getNumero() {
         return numero;
     }
 
@@ -42,7 +42,7 @@ public class Endereco {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Rua ").append(rua).append(", ").append(numero).append(" - ").append(cidade);
+        sb.append("Rua ").append(rua).append(", ").append(numero).append(", ").append(cidade);
         return sb.toString();
     }
 }

@@ -65,7 +65,7 @@ public class PetValidator {
     }
 
     public String validaRaca(String raca) {
-        if (!raca.matches("^[a-zA-Z\\s]+$")) {
+        if (!raca.matches("^\\s+$|(^[a-zA-Z]+)(\\s[a-zA-Z]+)*$")) {
             throw new RacaInvalidaException();
         }
         return raca;
