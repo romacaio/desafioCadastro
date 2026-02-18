@@ -1,5 +1,7 @@
 package model;
 
+import service.PetService;
+
 public class Pet {
     private String nome;
     private Tipo tipo;
@@ -79,12 +81,25 @@ public class Pet {
         this.raca = raca;
     }
 
+    public String getIdadeFormatada() {
+        if (idade == null) {
+            return PetService.NAO_INFORMADO;
+        }
+        if (idade > 1.0) {
+            return idade + " anos";
+        }
+
+        return idade + " meses";
+    }
+
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(nome).append(" - ").append(sexo).append(" - ").append(endereco).append(" - ")
-                .append(idade).append(" anos").append(" - ").append(peso).append("Kg")
-                .append(" - ").append(raca);
+        sb.append(nome != null ? nome : PetService.NAO_INFORMADO).append(" - ").append(tipo.getNomeUsual()).append(" - ")
+                .append(sexo.getNomeUsual()).append(" - ").append(endereco).append(" - ")
+                .append(getIdadeFormatada()).append(" - ").append(peso != null ? peso + "Kg" : PetService.NAO_INFORMADO)
+                .append(" - ").append(raca != null ? raca : PetService.NAO_INFORMADO);
 
         return sb.toString();
     }

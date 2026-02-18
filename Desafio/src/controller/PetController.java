@@ -9,6 +9,8 @@ import repository.PetRepository;
 import service.PetValidator;
 import view.ConsoleView;
 
+import java.io.FileNotFoundException;
+
 public class PetController {
     private ConsoleView consoleView;
     private PetValidator petValidator;
@@ -23,7 +25,6 @@ public class PetController {
     public void processarMenu() {
         int op = consoleView.exibirMenu();
         while (op != 6) {
-
             switch (op) {
                 case 1 -> {
                     System.out.println("\n## CADASTRO ##");
@@ -31,11 +32,18 @@ public class PetController {
                 }
                 //case 2 ->
                 //case 3 ->
-                //case 4 ->
+                case 4 -> {
+                    try {
+                        consoleView.listarPetsCadastrados();
+                    } catch (FileNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
                 //case 5 ->
                 case -1 -> System.out.println("Opção inválida! Apenas números são permitidos.\n");
                 default -> System.out.println("Opção inválida! Digite um número correspondente a uma opção válida.\n");
             }
+            System.out.println();
             op = consoleView.exibirMenu();
         }
         System.out.println("Programa encerrado...");

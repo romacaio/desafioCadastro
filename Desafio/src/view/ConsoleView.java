@@ -1,7 +1,10 @@
 package view;
 
+import model.Pet;
 import repository.FormularioRepository;
+import repository.PetRepository;
 
+import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -9,10 +12,12 @@ import java.util.Scanner;
 public class ConsoleView {
     private Scanner sc;
     private List<String> perguntasFormulario;
+    private PetRepository petRepository;
 
-    public ConsoleView(Scanner sc, FormularioRepository formulario) {
+    public ConsoleView(Scanner sc, FormularioRepository formulario, PetRepository petRepository) {
         this.sc = sc;
         this.perguntasFormulario = formulario.lerFormulario();
+        this.petRepository = petRepository;
     }
 
     public int exibirMenu() {
@@ -46,5 +51,14 @@ public class ConsoleView {
     public String exibirPerguntaEndereco(String perguntaEndereco) {
         System.out.print(perguntaEndereco);
         return sc.nextLine();
+    }
+
+    public void listarPetsCadastrados() throws FileNotFoundException {
+        List<Pet> petCadastrados = petRepository.carregarPetsFile();
+        int count = 1;
+        for (Pet pet : petCadastrados) {
+            System.out.println(count + ". " + pet);
+            count++;
+        }
     }
 }

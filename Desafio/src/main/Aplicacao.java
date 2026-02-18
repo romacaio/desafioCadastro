@@ -12,14 +12,14 @@ import java.util.Scanner;
 public class Aplicacao {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        FormularioRepository formulario = new FormularioRepository();
+        FormularioRepository formularioRepository = new FormularioRepository();
         PetService petService = new PetService();
         PetRepository petRepository = new PetRepository(petService);
-        ConsoleView console = new ConsoleView(sc, formulario);
+        ConsoleView consoleView = new ConsoleView(sc, formularioRepository, petRepository);
         PetValidator petValidator = new PetValidator();
-        PetController petController = new PetController(console, petValidator, petRepository);
+        PetController petController = new PetController(consoleView, petValidator, petRepository);
 
-        formulario.criarFormulario();
+        formularioRepository.criarFormulario();
         petController.processarMenu();
     }
 }

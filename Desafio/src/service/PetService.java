@@ -1,23 +1,40 @@
 package service;
 
-public class PetService {
-    private static final String NAO_INFORMADO = "não informado";
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-    public String analisaIdade(String inputIdade) {
-        if (inputIdade.equals("null")) {
-            return NAO_INFORMADO;
-        }
-        Double idade = Double.parseDouble(inputIdade);
-        if (idade < 1.0) {
-            return idade + " meses";
-        }
-        return idade + " anos";
-    }
+public class PetService {
+    public static final String NAO_INFORMADO = "nao informado";
 
     public String analisaNaoInformado(String input) {
-        if (input.equals("null")) {
+        String inputNormalizado = input.trim();
+
+        if (inputNormalizado.equals("null")) {
             return NAO_INFORMADO;
         }
-        return input;
+        if (inputNormalizado.equals(NAO_INFORMADO)) {
+            return null;
+        }
+        return inputNormalizado;
     }
+
+    public String extraiDadoFile(String linhaFile) {
+
+        Pattern regex = Pattern.compile("([a-zA-Z]+)([,\\w\\d\\s]+)$");
+        Matcher matcher = regex.matcher(linhaFile);
+
+        if (linhaFile.contains("anos") || linhaFile.contains("meses") || linhaFile.contains("Kg")) {
+            regex = Pattern.compile("\\d\\.\\d");
+            matcher = regex.matcher(linhaFile);
+            matcher.find();
+            return matcher.group();
+
+        } else if (matcher.find()) {
+            return matcher.group();
+
+        } else {
+            return NAO_INFORMADO;
+        }
+    }
+
 }

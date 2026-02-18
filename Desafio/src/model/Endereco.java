@@ -1,5 +1,7 @@
 package model;
 
+import service.PetService;
+
 public class Endereco {
     private Integer numero;
     private String cidade;
@@ -42,7 +44,7 @@ public class Endereco {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Rua ").append(rua).append(", ").append(numero).append(", ").append(cidade);
+        sb.append("Rua ").append(rua).append(", ").append(numero != null ? numero : PetService.NAO_INFORMADO).append(", ").append(cidade);
         return sb.toString();
     }
 }
