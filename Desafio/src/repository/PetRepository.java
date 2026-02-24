@@ -11,14 +11,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PetRepository {
     private static final File file = new File("src\\repository\\petsCadastrados");
-    private PetService petService;
-
-    public PetRepository(PetService petService) {
-        this.petService = petService;
-    }
 
     public void petsCadastradosCreated() {
         if (!file.exists()) {
@@ -40,7 +37,7 @@ public class PetRepository {
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePet))) {
 
-            String nome = petService.analisaNaoInformado(String.valueOf(pet.getNome()));
+            String nome = PetService.analisaNaoInformado(String.valueOf(pet.getNome()));
             bw.write("1 - " + nome);
             bw.newLine();
 
@@ -50,7 +47,7 @@ public class PetRepository {
             bw.newLine();
 
             String rua = pet.getEndereco().getRua();
-            String numero = petService.analisaNaoInformado(String.valueOf(pet.getEndereco().getNumero()));
+            String numero = PetService.analisaNaoInformado(String.valueOf(pet.getEndereco().getNumero()));
             String cidade = pet.getEndereco().getCidade();
             bw.write("4 - " + rua + ", " + numero + ", " + cidade);
             bw.newLine();
@@ -59,11 +56,11 @@ public class PetRepository {
             bw.write("5 - " + idade);
             bw.newLine();
 
-            String peso = petService.analisaNaoInformado(String.valueOf(pet.getPeso()));
-            bw.write("6 - " + peso + (peso.equals(PetService.NAO_INFORMADO) ? "" : "Kg"));
+            String peso = PetService.analisaNaoInformado(String.valueOf(pet.getPeso()));
+            bw.write("6 - " + peso + (peso.equals(Pet.NAO_INFORMADO) ? "" : "Kg"));
             bw.newLine();
 
-            String raca = petService.analisaNaoInformado(pet.getRaca());
+            String raca = PetService.analisaNaoInformado(pet.getRaca());
             bw.write("7 - " + raca);
 
         } catch (IOException e) {
@@ -106,20 +103,20 @@ public class PetRepository {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String linha;
             while ((linha = br.readLine()) != null) {
-                respostas.add(petService.extraiDadoFile(linha));
+                respostas.add(extraiDadoFile(linha));
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        pet.setNome(petService.analisaNaoInformado(respostas.get(0)));
+        pet.setNome(PetService.analisaNaoInformado(respostas.get(0)));
         pet.setTipo(Tipo.parse(respostas.get(1)));
         pet.setSexo(Sexo.parse(respostas.get(2)));
 
         Endereco endereco = new Endereco();
         String[] camposEndereco = respostas.get(3).split(",");
         endereco.setRua(camposEndereco[0].trim());
-        String numero = petService.analisaNaoInformado(camposEndereco[1]);
+        String numero = PetService.analisaNaoInformado(camposEndereco[1]);
         if (numero == null) {
             endereco.setNumero(null);
         } else {
@@ -128,21 +125,40 @@ public class PetRepository {
         endereco.setCidade(camposEndereco[2].trim());
         pet.setEndereco(endereco);
 
-        String idade = petService.analisaNaoInformado(respostas.get(4));
+        String idade = PetService.analisaNaoInformado(respostas.get(4));
         if (idade == null) {
             pet.setIdade(null);
         } else {
             pet.setIdade(Double.parseDouble(idade));
         }
 
-        String peso = petService.analisaNaoInformado(respostas.get(5));
+        String peso = PetService.analisaNaoInformado(respostas.get(5));
         if (peso == null) {
             pet.setPeso(null);
         } else {
             pet.setPeso(Double.parseDouble(peso));
         }
 
-        pet.setRaca(petService.analisaNaoInformado(respostas.get(6)));
+        pet.setRaca(PetService.analisaNaoInformado(respostas.get(6)));
         return pet;
+    }
+
+    public String extraiDadoFile(String linhaFile) {
+
+        Pattern regex = Pattern.compile("([a-zA-Z]+)([,\\w\\d\\s]+)$");
+        Matcher matcher = regex.matcher(linhaFile);
+
+        if (linhaFile.contains("anos") || linhaFile.contains("meses") || linhaFile.contains("Kg")) {
+            regex = Pattern.compile("\\d\\.\\d");
+            matcher = regex.matcher(linhaFile);
+            matcher.find();
+            return matcher.group();
+
+        } else if (matcher.find()) {
+            return matcher.group();
+
+        } else {
+            return Pet.NAO_INFORMADO;
+        }
     }
 }

@@ -71,4 +71,11 @@ public class PetValidator {
         return raca;
     }
 
+    public String validaApenasString(String string) {
+        if (!string.matches("^\\s+$|(^[a-zA-Z]+)(\\s[a-zA-Z]+)*$")) {
+            throw new IllegalArgumentException("Digite uma entrada válida.");
+        }
+        return string;
+    }
+
 }

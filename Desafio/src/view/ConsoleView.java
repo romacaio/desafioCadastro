@@ -40,7 +40,7 @@ public class ConsoleView {
         }
     }
 
-    public String exibirPergunta(int index, Boolean apenasExibir) {
+    public String exibirPerguntaFormulario(int index, Boolean apenasExibir) {
         System.out.println(perguntasFormulario.get(index));
         if (apenasExibir) {
             return null;
@@ -48,17 +48,66 @@ public class ConsoleView {
         return sc.nextLine();
     }
 
-    public String exibirPerguntaEndereco(String perguntaEndereco) {
-        System.out.print(perguntaEndereco);
+    public String exibirPergunta(String pergunta) {
+        System.out.println(pergunta);
         return sc.nextLine();
     }
 
-    public void listarPetsCadastrados() throws FileNotFoundException {
+    public void exibirPets() throws FileNotFoundException {
         List<Pet> petCadastrados = petRepository.carregarPetsFile();
         int count = 1;
         for (Pet pet : petCadastrados) {
             System.out.println(count + ". " + pet);
             count++;
+        }
+    }
+
+    public void exibirPets(List<Pet> listaPets) {
+        if (listaPets.isEmpty()) {
+            System.out.println("Nenhum pet foi econtrado.");
+        }
+        int count = 1;
+        for (Pet pet : listaPets) {
+            System.out.println(count + ". " + pet);
+            count++;
+        }
+    }
+
+    public int exibirMenuCriterioBusca(int numCriterio) {
+        System.out.println("## BUSCA COM CRITÉRIO ##");
+        System.out.println("[1] Nome ou sobrenome");
+        System.out.println("[2] Sexo");
+        System.out.println("[3] Idade");
+        System.out.println("[4] Peso");
+        System.out.println("[5] Raça");
+        System.out.println("[6] Endereço");
+        System.out.printf("Digite o %d° critério: \n", numCriterio);
+
+        try {
+            int op = sc.nextInt();
+            sc.nextLine();
+            return op;
+        } catch (InputMismatchException e) {
+            sc.nextLine();
+            return -1;
+        }
+    }
+
+    public Boolean isCombinarCriteriosBusca() {
+        System.out.println("Deseja combinar critérios para uma busca mais específica? ");
+        System.out.println("[1] Sim");
+        System.out.println("[2] Não");
+        try {
+            int op = sc.nextInt();
+            sc.nextLine();
+
+            if (op == 1) return true;
+            if (op == 2) return false;
+            else throw new IllegalArgumentException();
+
+        } catch (InputMismatchException | IllegalArgumentException e) {
+            sc.nextLine();
+            return null;
         }
     }
 }

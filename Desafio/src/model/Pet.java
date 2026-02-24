@@ -1,8 +1,7 @@
 package model;
 
-import service.PetService;
-
 public class Pet {
+    public static final String NAO_INFORMADO = "nao informado";
     private String nome;
     private Tipo tipo;
     private Sexo sexo;
@@ -83,7 +82,7 @@ public class Pet {
 
     public String getIdadeFormatada() {
         if (idade == null) {
-            return PetService.NAO_INFORMADO;
+            return NAO_INFORMADO;
         }
         if (idade > 1.0) {
             return idade + " anos";
@@ -96,10 +95,10 @@ public class Pet {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(nome != null ? nome : PetService.NAO_INFORMADO).append(" - ").append(tipo.getNomeUsual()).append(" - ")
+        sb.append(nome != null ? nome : NAO_INFORMADO).append(" - ").append(tipo.getNomeUsual()).append(" - ")
                 .append(sexo.getNomeUsual()).append(" - ").append(endereco).append(" - ")
-                .append(getIdadeFormatada()).append(" - ").append(peso != null ? peso + "Kg" : PetService.NAO_INFORMADO)
-                .append(" - ").append(raca != null ? raca : PetService.NAO_INFORMADO);
+                .append(getIdadeFormatada()).append(" - ").append(peso != null ? peso + "Kg" : NAO_INFORMADO)
+                .append(" - ").append(raca != null ? raca : NAO_INFORMADO);
 
         return sb.toString();
     }
