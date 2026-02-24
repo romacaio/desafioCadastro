@@ -81,6 +81,7 @@ public class ConsoleView {
         System.out.println("[4] Peso");
         System.out.println("[5] Raça");
         System.out.println("[6] Endereço");
+        System.out.println("[7] Buscar sem novos critérios");
         System.out.printf("Digite o %d° critério: \n", numCriterio);
 
         try {
@@ -99,8 +100,6 @@ public class ConsoleView {
         System.out.println("[2] Não");
         try {
             int op = sc.nextInt();
-            sc.nextLine();
-
             if (op == 1) return true;
             if (op == 2) return false;
             else throw new IllegalArgumentException();

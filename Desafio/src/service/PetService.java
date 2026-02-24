@@ -1,5 +1,6 @@
 package service;
 
+import exceptions.PetNotFoundException;
 import model.CriterioBusca;
 import model.Pet;
 import model.Sexo;
@@ -19,11 +20,11 @@ public class PetService {
     }
 
     public static String analisaNaoInformado(String input) {
-        String inputNormalizado = input.trim();
-
-        if (inputNormalizado.equals("null")) {
+        if (input.equals("null")) {
             return Pet.NAO_INFORMADO;
         }
+
+        String inputNormalizado = input.trim();
         if (inputNormalizado.equals(Pet.NAO_INFORMADO)) {
             return null;
         }
@@ -34,7 +35,9 @@ public class PetService {
 
         List<Pet> petsCadastrados = petRepository.carregarPetsFile();
         filtrarPorTipo(petsCadastrados, criterioBusca.getTipoPet());
+        int contPetsIncial = petsCadastrados.size();
 
+        if (criterioBusca.getNomeOuSobrenome() != null) filtrarPorNome(petsCadastrados, criterioBusca.getNomeOuSobrenome());
         if (criterioBusca.getPeso() != null) filtrarPorPeso(petsCadastrados, criterioBusca.getPeso());
         if (criterioBusca.getSexo() != null) filtrarPorSexo(petsCadastrados, criterioBusca.getSexo());
         if (criterioBusca.getIdade() != null) filtrarPorIdade(petsCadastrados, criterioBusca.getIdade());
@@ -42,6 +45,9 @@ public class PetService {
         if (criterioBusca.getRaca() != null) filtrarPorRaca(petsCadastrados, criterioBusca.getRaca());
         if (criterioBusca.getEndereco() != null) filtrarPorEndereco(petsCadastrados, criterioBusca.getEndereco());
 
+        if (petsCadastrados.isEmpty()) {
+            throw new PetNotFoundException();
+        }
         return petsCadastrados;
     }
 
@@ -65,28 +71,26 @@ public class PetService {
         removerPets(petsRemove, petsCadastrados);
     }
 
-    public void filtrarPorIdade(List<Pet> petsCadastrados, Double idadeBusca) {
-        String idadeBuscaAnalizado = analisaNaoInformado(String.valueOf(idadeBusca));
+    public void filtrarPorIdade(List<Pet> petsCadastrados, String idadeBusca) {
         String idade;
         List<Pet> petsRemove = new ArrayList<>();
 
         for (Pet pet : petsCadastrados) {
-            idade = analisaNaoInformado(String.valueOf(idadeBuscaAnalizado));
-            if (idade.equalsIgnoreCase(idadeBuscaAnalizado)) {
+            idade = analisaNaoInformado(String.valueOf(pet.getIdade()));
+            if (idade.equalsIgnoreCase(idadeBusca)) {
                 petsRemove.add(pet);
             }
         }
         removerPets(petsRemove, petsCadastrados);
     }
 
-    public void filtrarPorPeso(List<Pet> petsCadastrados, Double pesoBusca) {
-        String pesoBuscaAnalizado = analisaNaoInformado(String.valueOf(pesoBusca));
+    public void filtrarPorPeso(List<Pet> petsCadastrados, String pesoBusca) {
         String peso;
         List<Pet> petsRemove = new ArrayList<>();
 
         for (Pet pet : petsCadastrados) {
             peso = analisaNaoInformado(String.valueOf(pet.getPeso()));
-            if (!peso.equalsIgnoreCase(pesoBuscaAnalizado)) {
+            if (!peso.equalsIgnoreCase(pesoBusca)) {
                 petsRemove.add(pet);
             }
         }
@@ -94,12 +98,12 @@ public class PetService {
     }
 
     public void filtrarPorEndereco(List<Pet> petsCadastrados, String enderecoBusca) {
-        String enderecoBuscaAnalizado = analisaNaoInformado(String.valueOf(enderecoBusca).toLowerCase());
+        String enderecoBuscaAnalizado = enderecoBusca.toLowerCase();
         String endereco;
         List<Pet> petsRemove = new ArrayList<>();
 
         for (Pet pet : petsCadastrados) {
-            endereco = pet.getEndereco().toString().toLowerCase().toLowerCase();
+            endereco = pet.getEndereco().toString().toLowerCase().replace("rua", "");
             if (!endereco.contains(enderecoBuscaAnalizado)) {
                 petsRemove.add(pet);
             }
@@ -108,7 +112,7 @@ public class PetService {
     }
 
     public void filtrarPorRaca(List<Pet> petsCadastrados, String racaBusca) {
-        String racaBuscaAnalizado = analisaNaoInformado(String.valueOf(racaBusca).toLowerCase());
+        String racaBuscaAnalizado = racaBusca.toLowerCase();
         String raca;
         List<Pet> petsRemove = new ArrayList<>();
 
@@ -122,7 +126,7 @@ public class PetService {
     }
 
     public void filtrarPorNome(List<Pet> petsCadastrados, String nomeBusca) {
-        String nomeBuscaAnalizado = analisaNaoInformado(String.valueOf(nomeBusca)).toLowerCase();
+        String nomeBuscaAnalizado = nomeBusca.toLowerCase();
         String nome;
         List<Pet> petsRemove = new ArrayList<>();
 
@@ -141,4 +145,3 @@ public class PetService {
         }
     }
 }
-

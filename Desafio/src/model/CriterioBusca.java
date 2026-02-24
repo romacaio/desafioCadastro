@@ -4,15 +4,14 @@ public class CriterioBusca {
     private Tipo tipoPet;
     private String nomeOuSobrenome;
     private Sexo sexo;
-    private Double peso;
-    private Double idade;
+    private String peso;
+    private String idade;
     private String raca;
     private String endereco;
 
     public CriterioBusca() {
 
     }
-
 
     public Tipo getTipoPet() {
         return tipoPet;
@@ -38,19 +37,19 @@ public class CriterioBusca {
         this.sexo = sexo;
     }
 
-    public Double getPeso() {
+    public String getPeso() {
         return peso;
     }
 
-    public void setPeso(Double peso) {
+    public void setPeso(String peso) {
         this.peso = peso;
     }
 
-    public Double getIdade() {
+    public String  getIdade() {
         return idade;
     }
 
-    public void setIdade(Double idade) {
+    public void setIdade(String idade) {
         this.idade = idade;
     }
 

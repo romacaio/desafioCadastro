@@ -70,7 +70,8 @@ public class PetRepository {
 
     public File criaFilePet(Pet pet) {
         String patchDiretorio = file + "\\";
-        String nomeFormatado = "-" + pet.getNome().toUpperCase().replace(" ", "").concat(".txt");
+        String nome = pet.getNome() == null ? Pet.NAO_INFORMADO : pet.getNome();
+        String nomeFormatado = "-" + nome.toUpperCase().replace(" ", "").concat(".txt");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmm");
 
         return new File(patchDiretorio + dtf.format(LocalDateTime.now()) + nomeFormatado);

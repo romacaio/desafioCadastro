@@ -8,7 +8,7 @@ public class PetValidator {
         if (nome.isBlank()) {
             return null;
         }
-        if (!nome.matches("^\\s+$|(?<primeiroNome>[a-zA-Z]+)(\\s[a-zA-Z]+)+$")) {
+        if (!nome.matches("^\\s*$|(?<primeiroNome>[a-zA-Z]+)(\\s[a-zA-Z]+)+$")) {
             throw new NomeInvalidoException();
         }
         return nome;
@@ -65,14 +65,14 @@ public class PetValidator {
     }
 
     public String validaRaca(String raca) {
-        if (!raca.matches("^\\s+$|(^[a-zA-Z]+)(\\s[a-zA-Z]+)*$")) {
+        if (!raca.matches("^\\s*$|(^[a-zA-Z]+)(\\s[a-zA-Z]+)*$")) {
             throw new RacaInvalidaException();
         }
         return raca;
     }
 
     public String validaApenasString(String string) {
-        if (!string.matches("^\\s+$|(^[a-zA-Z]+)(\\s[a-zA-Z]+)*$")) {
+        if (!string.matches("^\\s*$|(^[a-zA-Z]+)(\\s[a-zA-Z]+)*$")) {
             throw new IllegalArgumentException("Digite uma entrada válida.");
         }
         return string;

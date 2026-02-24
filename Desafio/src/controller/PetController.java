@@ -38,7 +38,7 @@ public class PetController {
                     try {
                         consoleView.exibirPets();
                     } catch (FileNotFoundException e) {
-                        System.out.println(e.getMessage() + "\n");
+                        System.out.println(e.getMessage());
                     }
                 }
                 case 5 -> {
@@ -47,11 +47,11 @@ public class PetController {
                         consoleView.exibirPets(listaPets);
 
                     } catch (FileNotFoundException e) {
-                        System.out.println(e.getMessage() + "\n");
+                        System.out.println(e.getMessage());
                     }
                 }
-                case -1 -> System.out.println("Opção inválida! Apenas números são permitidos.\n");
-                default -> System.out.println("Opção inválida! Digite um número correspondente a uma opção válida.\n");
+                case -1 -> System.out.println("Opção inválida! Apenas números são permitidos.");
+                default -> System.out.println("Opção inválida! Digite um número correspondente a uma opção válida.");
             }
             System.out.println();
             op = consoleView.exibirMenu();
@@ -178,6 +178,7 @@ public class PetController {
                 String inputTipo = consoleView.exibirPergunta("\nQual o TIPO do pet: ");
                 Tipo tipo = Tipo.parse(inputTipo);
                 criterioBusca.setTipoPet(tipo);
+
             } catch (TipoParseException e) {
                 System.out.println(e.getMessage() + "\n");
                 continue;
@@ -203,8 +204,9 @@ public class PetController {
                         while (true) {
                             String inputNome = consoleView.exibirPergunta("NOME do pet para busca: ");
                             try {
-                                String nome = petValidator.validaApenasString(inputNome);
-                                criterioBusca.setNomeOuSobrenome(nome);
+                                String nomeValidado = petValidator.validaApenasString(inputNome);
+                                criterioBusca.setNomeOuSobrenome(PetService.analisaNaoInformado(String.valueOf(nomeValidado)));
+
                             } catch (IllegalArgumentException e) {
                                 System.out.println(e.getMessage() + "\n");
                                 continue;
@@ -212,13 +214,13 @@ public class PetController {
                             break;
                         }
                     }
-
                     case 2 -> {
                         while (true) {
                             String inputSexo = consoleView.exibirPergunta("SEXO do pet para busca: ");
                             try {
                                 Sexo sexo = Sexo.parse(inputSexo);
                                 criterioBusca.setSexo(sexo);
+
                             } catch (SexoParseException e) {
                                 System.out.println(e.getMessage() + "\n");
                                 continue;
@@ -226,13 +228,13 @@ public class PetController {
                             break;
                         }
                     }
-
                     case 3 -> {
                         while (true) {
                             String inputIdade = consoleView.exibirPergunta("IDADE do prt para busca: ");
                             try {
-                                Double idade = petValidator.validaIdade(inputIdade);
-                                criterioBusca.setIdade(idade);
+                                Double idadeValidada = petValidator.validaIdade(inputIdade);
+                                criterioBusca.setIdade(PetService.analisaNaoInformado(String.valueOf(idadeValidada)));
+
                             } catch (IdadeInvalidaException e) {
                                 System.out.println(e.getMessage() + "\n");
                                 continue;
@@ -243,13 +245,13 @@ public class PetController {
                             break;
                         }
                     }
-
                     case 4 -> {
                         while (true) {
                             String inputPeso = consoleView.exibirPergunta("PESO do pet para busca: ");
                             try {
-                                Double peso = petValidator.validaPeso(inputPeso);
-                                criterioBusca.setPeso(peso);
+                                Double pesoValidado = petValidator.validaPeso(inputPeso);
+                                criterioBusca.setPeso(PetService.analisaNaoInformado(String.valueOf(pesoValidado)));
+
                             } catch (PesoInvalidoException e) {
                                 System.out.println(e.getMessage() + "\n");
                                 continue;
@@ -260,13 +262,13 @@ public class PetController {
                             break;
                         }
                     }
-
                     case 5 -> {
                         while (true) {
                             String inputRaca = consoleView.exibirPergunta("RAÇA do pet para busca: ");
                             try {
-                                String raca = petValidator.validaRaca(inputRaca);
-                                criterioBusca.setRaca(raca);
+                                String racaValidada = petValidator.validaRaca(inputRaca);
+                                criterioBusca.setRaca(PetService.analisaNaoInformado(String.valueOf(racaValidada)));
+
                             } catch (RacaInvalidaException e) {
                                 System.out.println(e.getMessage() + "\n");
                                 continue;
@@ -274,10 +276,15 @@ public class PetController {
                             break;
                         }
                     }
-
                     case 6 -> {
                         String inputEndereco = consoleView.exibirPergunta("ENDERECO do pet para busca (qualquer campo do endereço): ");
-                        criterioBusca.setEndereco(inputEndereco);
+                        if (inputEndereco.isBlank()) {
+                            inputEndereco = null;
+                        }
+                        criterioBusca.setEndereco(PetService.analisaNaoInformado(String.valueOf(inputEndereco)));
+                    }
+                    case 7 -> {
+                        return criterioBusca;
                     }
                     case -1 -> {
                         System.out.println("Opção inválida! Apenas números são permitidos.\n");
