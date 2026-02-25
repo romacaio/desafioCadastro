@@ -30,12 +30,13 @@ public class ConsoleView {
         System.out.println("[6] Sair");
         System.out.print("Digite uma opção: ");
 
+        String op = sc.nextLine();
+        if (op.isBlank()) {
+            return -1;
+        }
         try {
-            int op = sc.nextInt();
-            sc.nextLine();
-            return op;
-        } catch (InputMismatchException e) {
-            sc.nextLine();
+            return Integer.parseInt(op);
+        } catch (NumberFormatException e) {
             return -1;
         }
     }
@@ -84,12 +85,13 @@ public class ConsoleView {
         System.out.println("[7] Buscar sem novos critérios");
         System.out.printf("Digite o %d° critério: \n", numCriterio);
 
+        String op = sc.nextLine();
+        if (op.isBlank()) {
+            return -1;
+        }
         try {
-            int op = sc.nextInt();
-            sc.nextLine();
-            return op;
-        } catch (InputMismatchException e) {
-            sc.nextLine();
+            return Integer.parseInt(op);
+        } catch (NumberFormatException e) {
             return -1;
         }
     }
@@ -98,15 +100,23 @@ public class ConsoleView {
         System.out.println("Deseja combinar critérios para uma busca mais específica? ");
         System.out.println("[1] Sim");
         System.out.println("[2] Não");
+
+        String op = sc.nextLine();
+        if (op.isBlank()) {
+            return null;
+        }
         try {
-            int op = sc.nextInt();
-            if (op == 1) return true;
-            if (op == 2) return false;
+            int opInt = Integer.parseInt(op);
+            if (opInt == 1) return true;
+            if (opInt == 2) return false;
             else throw new IllegalArgumentException();
 
         } catch (InputMismatchException | IllegalArgumentException e) {
-            sc.nextLine();
             return null;
         }
+    }
+
+    public void scClose() {
+        sc.close();
     }
 }

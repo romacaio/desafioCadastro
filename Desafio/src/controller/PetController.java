@@ -57,6 +57,7 @@ public class PetController {
             op = consoleView.exibirMenu();
         }
         System.out.println("Programa encerrado...");
+        consoleView.scClose();
         System.exit(0);
     }
 
