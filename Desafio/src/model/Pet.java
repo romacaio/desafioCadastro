@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Pet {
     public static final String NAO_INFORMADO = "nao informado";
     private String nome;
@@ -22,6 +24,23 @@ public class Pet {
         this.idade = idade;
         this.peso = peso;
         this.raca = raca;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
+        Pet pet = (Pet) o;
+        return Objects.equals(this.nome, pet.getNome()) &&
+                Objects.equals(this.tipo, pet.getTipo()) &&
+                Objects.equals(this.sexo, pet.getSexo()) &&
+                Objects.equals(this.raca, pet.getRaca()) &&
+                Objects.equals(this.idade, pet.getIdade()) &&
+                Objects.equals(this.peso, pet.getPeso());
     }
 
     public String getNome() {

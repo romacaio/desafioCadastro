@@ -74,7 +74,7 @@ public class PetRepository {
     public boolean isPetExiste(Pet pet) throws FileNotFoundException {
         List<Pet> petsCadastrados = carregarPetsFile();
         for (Pet p : petsCadastrados) {
-            if (pet.toString().equalsIgnoreCase(p.toString())) {
+            if (p.equals(pet)) {
                 return true;
             }
         }
