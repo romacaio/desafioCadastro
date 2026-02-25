@@ -23,8 +23,11 @@ public class PetRepository {
         }
     }
 
-    public void salvarPet(Pet pet) {
+    public void salvarPet(Pet pet) throws FileNotFoundException {
         petsCadastradosCreated();
+        if (isPetExiste(pet)) {
+            throw new IllegalStateException("Este Pet já está Cadastrado no Sistema.");
+        }
 
         File filePet = null;
         try {
@@ -66,6 +69,16 @@ public class PetRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isPetExiste(Pet pet) throws FileNotFoundException {
+        List<Pet> petsCadastrados = carregarPetsFile();
+        for (Pet p : petsCadastrados) {
+            if (pet.toString().equalsIgnoreCase(p.toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public File criaFilePet(Pet pet) {

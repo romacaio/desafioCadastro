@@ -30,7 +30,11 @@ public class PetController {
                 case 1 -> {
                     System.out.println("\n## CADASTRO ##");
                     Pet pet = cadastro();
-                    petRepository.salvarPet(pet);
+                    try {
+                        petRepository.salvarPet(pet);
+                    } catch (FileNotFoundException | IllegalStateException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
                 //case 2 ->
                 //case 3 ->
