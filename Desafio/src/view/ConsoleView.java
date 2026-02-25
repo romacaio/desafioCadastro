@@ -56,6 +56,9 @@ public class ConsoleView {
 
     public void exibirPets() throws FileNotFoundException {
         List<Pet> petCadastrados = petRepository.carregarPetsFile();
+        if (petCadastrados.isEmpty()) {
+            System.out.println("Nenhum pet foi econtrado.");
+        }
         int count = 1;
         for (Pet pet : petCadastrados) {
             System.out.println(count + ". " + pet);
@@ -113,6 +116,22 @@ public class ConsoleView {
 
         } catch (InputMismatchException | IllegalArgumentException e) {
             return null;
+        }
+    }
+
+    public int exibirMenuDelete() {
+        System.out.println("## Deleta Pet ##");
+        System.out.println("Digite o número do Pet que deseja deletar: ");
+
+        String op = sc.nextLine();
+        if (op.isBlank()) {
+            return -1;
+        }
+        try {
+            return Integer.parseInt(op);
+
+        } catch (NumberFormatException e) {
+            return -1;
         }
     }
 

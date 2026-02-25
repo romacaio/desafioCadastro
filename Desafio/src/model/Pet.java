@@ -1,9 +1,11 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Pet {
     public static final String NAO_INFORMADO = "nao informado";
+
     private String nome;
     private Tipo tipo;
     private Sexo sexo;
@@ -11,6 +13,7 @@ public class Pet {
     private Double idade;
     private Double peso;
     private String raca;
+    private LocalDateTime dateCadastro;
 
     public Pet() {
 
@@ -97,6 +100,14 @@ public class Pet {
 
     public void setRaca(String raca) {
         this.raca = raca;
+    }
+
+    public LocalDateTime getDateCadastro() {
+        return dateCadastro;
+    }
+
+    public void setDateCadastro(LocalDateTime dateCadastro) {
+        this.dateCadastro = dateCadastro;
     }
 
     public String getIdadeFormatada() {

@@ -8,6 +8,7 @@ import service.PetValidator;
 import view.ConsoleView;
 
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PetController {
@@ -32,12 +33,26 @@ public class PetController {
                     Pet pet = cadastro();
                     try {
                         petRepository.salvarPet(pet);
+                        System.out.println(pet.getNome() + "cadastrado no sistema com SUCESSO!");
+
                     } catch (FileNotFoundException | IllegalStateException e) {
                         System.out.println(e.getMessage());
                     }
                 }
                 //case 2 ->
-                //case 3 ->
+                case 3 -> {
+                    try {
+                        List<Pet> listaPets = petService.buscaPet(processarCriterio());
+                        consoleView.exibirPets(listaPets);
+                        System.out.println();
+                        Pet petRemove = processarPetDelete(listaPets);
+                        petRepository.excluirPet(petRemove);
+                        System.out.println(petRemove.getNome() + " removido do sistema com SUCESSO!");
+
+                    } catch (FileNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
                 case 4 -> {
                     try {
                         consoleView.exibirPets();
@@ -172,6 +187,7 @@ public class PetController {
             }
             break;
         }
+        newPet.setDateCadastro(LocalDateTime.now());
         return newPet;
     }
 
@@ -304,5 +320,19 @@ public class PetController {
             }
         }
         return criterioBusca;
+    }
+
+    public Pet processarPetDelete(List<Pet> listaPets) {
+        while (true) {
+            int op = consoleView.exibirMenuDelete();
+            if (op == -1) {
+                System.out.println("Opção inválida! Apenas números são permitidos.\n");
+                continue;
+            } else if (op > listaPets.size()) {
+                System.out.println("Opção inválida! Digite um número correspondente a um critério válido.\n");
+                continue;
+            }
+            return listaPets.get(op - 1);
+        }
     }
 }

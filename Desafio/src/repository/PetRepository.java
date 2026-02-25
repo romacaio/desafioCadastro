@@ -11,11 +11,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PetRepository {
     private static final File file = new File("src\\repository\\petsCadastrados");
+    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmm");
 
     public void petsCadastradosCreated() {
         if (!file.exists()) {
@@ -31,7 +30,7 @@ public class PetRepository {
 
         File filePet = null;
         try {
-            filePet = criaFilePet(pet);
+            filePet = criaFilePet(criaNomeFile(pet));
             filePet.createNewFile();
 
         } catch (IOException e) {
@@ -65,6 +64,10 @@ public class PetRepository {
 
             String raca = PetService.analisaNaoInformado(pet.getRaca());
             bw.write("7 - " + raca);
+            bw.newLine();
+
+            String dateCadastro = dtf.format(pet.getDateCadastro());
+            bw.write("8 - " + dateCadastro);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,6 +76,9 @@ public class PetRepository {
 
     public boolean isPetExiste(Pet pet) throws FileNotFoundException {
         List<Pet> petsCadastrados = carregarPetsFile();
+        if (petsCadastrados.isEmpty()) {
+            return false;
+        }
         for (Pet p : petsCadastrados) {
             if (p.equals(pet)) {
                 return true;
@@ -81,13 +87,15 @@ public class PetRepository {
         return false;
     }
 
-    public File criaFilePet(Pet pet) {
-        String patchDiretorio = file + "\\";
+    public String criaNomeFile(Pet pet) {
         String nome = pet.getNome() == null ? Pet.NAO_INFORMADO : pet.getNome();
-        String nomeFormatado = "-" + nome.toUpperCase().replace(" ", "").concat(".txt");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmm");
+        return dtf.format(pet.getDateCadastro()) + "-" + nome.toUpperCase().replace(" ", "").concat(".txt");
+    }
 
-        return new File(patchDiretorio + dtf.format(LocalDateTime.now()) + nomeFormatado);
+    public File criaFilePet(String nomeFile) {
+        String patchDiretorio = file + "\\";
+        File filePet = new File(patchDiretorio + nomeFile);
+        return filePet;
     }
 
     public List<Pet> carregarPetsFile() throws FileNotFoundException {
@@ -97,9 +105,6 @@ public class PetRepository {
 
         List<Pet> petsCadastrados = new ArrayList<>();
         File[] filesPets = file.listFiles();
-        if (filesPets.length == 0) {
-            throw new FileNotFoundException("Nenhum pet ainda foi cadastrado no sistema.");
-        }
 
         for (File filePet : filesPets) {
             if (filePet.isFile() && filePet.getName().endsWith(".txt")) {
@@ -108,7 +113,6 @@ public class PetRepository {
         }
         return petsCadastrados;
     }
-
 
     public Pet lerArquivo(File file) {
         Pet pet = new Pet();
@@ -154,25 +158,30 @@ public class PetRepository {
         }
 
         pet.setRaca(PetService.analisaNaoInformado(respostas.get(6)));
+
+        LocalDateTime dateCadastro = LocalDateTime.parse(respostas.get(7), dtf);
+        pet.setDateCadastro(dateCadastro);
         return pet;
     }
 
     public String extraiDadoFile(String linhaFile) {
-
-        Pattern regex = Pattern.compile("([a-zA-Z]+)([,\\w\\d\\s]+)$");
-        Matcher matcher = regex.matcher(linhaFile);
+        String[] partes = linhaFile.split(" - ", 2);
+        String dadoExtraido = partes[1].trim();
 
         if (linhaFile.contains("anos") || linhaFile.contains("meses") || linhaFile.contains("Kg")) {
-            regex = Pattern.compile("\\d\\.\\d");
-            matcher = regex.matcher(linhaFile);
-            matcher.find();
-            return matcher.group();
+            dadoExtraido = dadoExtraido.replaceAll("[^0-9.]", "");
+        }
+        return dadoExtraido.isBlank() ? Pet.NAO_INFORMADO : dadoExtraido;
+    }
 
-        } else if (matcher.find()) {
-            return matcher.group();
+    public void excluirPet(Pet petRemove) {
+        String nomeFileRemove = criaNomeFile(petRemove);
+        File[] petsCadastrados = file.listFiles();
 
-        } else {
-            return Pet.NAO_INFORMADO;
+        for (File filePet : petsCadastrados) {
+            if (filePet.isFile() && filePet.getName().equals(nomeFileRemove)) {
+                filePet.delete();
+            }
         }
     }
 }
