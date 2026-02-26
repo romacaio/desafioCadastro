@@ -36,7 +36,6 @@ public class PetRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePet))) {
 
             String nome = PetService.analisaNaoInformado(String.valueOf(pet.getNome()));
@@ -161,6 +160,7 @@ public class PetRepository {
 
         LocalDateTime dateCadastro = LocalDateTime.parse(respostas.get(7), dtf);
         pet.setDateCadastro(dateCadastro);
+
         return pet;
     }
 
@@ -174,7 +174,10 @@ public class PetRepository {
         return dadoExtraido.isBlank() ? Pet.NAO_INFORMADO : dadoExtraido;
     }
 
-    public void excluirPet(Pet petRemove) {
+    public void excluirPet(Pet petRemove) throws FileNotFoundException {
+        if (!isPetExiste(petRemove)) {
+            throw new FileNotFoundException();
+        }
         String nomeFileRemove = criaNomeFile(petRemove);
         File[] petsCadastrados = file.listFiles();
 
@@ -184,4 +187,5 @@ public class PetRepository {
             }
         }
     }
+
 }

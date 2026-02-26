@@ -29,23 +29,37 @@ public class PetController {
         while (op != 6) {
             switch (op) {
                 case 1 -> {
-                    System.out.println("\n## CADASTRO ##");
+                    System.out.println("\n## CADASTRO PET ##");
                     Pet pet = cadastro();
                     try {
                         petRepository.salvarPet(pet);
-                        System.out.println(pet.getNome() + "cadastrado no sistema com SUCESSO!");
+                        System.out.println(pet.getNome() + " cadastrado no sistema com SUCESSO!");
 
                     } catch (FileNotFoundException | IllegalStateException e) {
                         System.out.println(e.getMessage());
                     }
                 }
-                //case 2 ->
+                case 2 -> {
+                    try {
+                        List<Pet> listaPets = petService.buscaPet(processarCriterio());
+
+                        System.out.println("\n## ALTERAR PET ##");
+                        Pet petAlterar = processarPetSelecionado(listaPets);
+                        Pet petAlterado = processarPetAltera(petAlterar);
+                        petRepository.salvarPet(petAlterado);
+                        petRepository.excluirPet(petAlterar);
+                        System.out.println("Pet alterado com SUCESSO!");
+
+                    } catch (FileNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
                 case 3 -> {
                     try {
                         List<Pet> listaPets = petService.buscaPet(processarCriterio());
-                        consoleView.exibirPets(listaPets);
-                        System.out.println();
-                        Pet petRemove = processarPetDelete(listaPets);
+
+                        System.out.println("\n## REMOVER PET ##");
+                        Pet petRemove = processarPetSelecionado(listaPets);
                         petRepository.excluirPet(petRemove);
                         System.out.println(petRemove.getNome() + " removido do sistema com SUCESSO!");
 
@@ -56,12 +70,14 @@ public class PetController {
                 case 4 -> {
                     try {
                         consoleView.exibirPets();
+
                     } catch (FileNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
                 }
                 case 5 -> {
                     try {
+                        System.out.println("\n## BUSCAR PET ##");
                         List<Pet> listaPets = petService.buscaPet(processarCriterio());
                         consoleView.exibirPets(listaPets);
 
@@ -123,7 +139,7 @@ public class PetController {
             try {
                 consoleView.exibirPerguntaFormulario(3, true);
                 String inputNumero = consoleView.exibirPergunta("Número: ");
-                Integer numero = petValidator.ValidaNumero(inputNumero);
+                Integer numero = petValidator.validaNumero(inputNumero);
                 endereco.setNumero(numero);
 
                 String inputCidade = consoleView.exibirPergunta("Cidade: ");
@@ -201,7 +217,7 @@ public class PetController {
                 criterioBusca.setTipoPet(tipo);
 
             } catch (TipoParseException e) {
-                System.out.println(e.getMessage() + "\n");
+                System.out.println(e.getMessage());
                 continue;
             }
             break;
@@ -251,7 +267,7 @@ public class PetController {
                     }
                     case 3 -> {
                         while (true) {
-                            String inputIdade = consoleView.exibirPergunta("IDADE do prt para busca: ");
+                            String inputIdade = consoleView.exibirPergunta("IDADE do pet para busca: ");
                             try {
                                 Double idadeValidada = petValidator.validaIdade(inputIdade);
                                 criterioBusca.setIdade(PetService.analisaNaoInformado(String.valueOf(idadeValidada)));
@@ -322,9 +338,11 @@ public class PetController {
         return criterioBusca;
     }
 
-    public Pet processarPetDelete(List<Pet> listaPets) {
+    public Pet processarPetSelecionado(List<Pet> listaPets) {
+
         while (true) {
-            int op = consoleView.exibirMenuDelete();
+            consoleView.exibirPets(listaPets);
+            int op = consoleView.exibirMenuSelecionaPet();
             if (op == -1) {
                 System.out.println("Opção inválida! Apenas números são permitidos.\n");
                 continue;
@@ -335,4 +353,107 @@ public class PetController {
             return listaPets.get(op - 1);
         }
     }
+
+    public Pet processarPetAltera(Pet petAlterar) {
+        Pet petAlterado = new Pet(petAlterar);
+        int op = consoleView.exibirMenuAlteraPet();
+
+        while (op != 6) {
+            switch (op) {
+                case -1 -> System.out.println("Opção inválida! Apenas números são permitidos.\n");
+
+                case 1 -> {
+                    while (true) {
+                        try {
+                            String inputNome = consoleView.exibirPergunta("Novo NOME do pet: ");
+                            String nome = petValidator.validaNome(inputNome);
+                            petAlterado.setNome(nome);
+
+                        } catch (NomeInvalidoException e) {
+                            System.out.println(e.getMessage() + "\n");
+                            continue;
+                        }
+                        break;
+                    }
+                }
+                case 2 -> {
+                    while (true) {
+                        try {
+                            String idadeInput = consoleView.exibirPergunta("Nova IDADE do pet: ");
+                            Double idade = petValidator.validaIdade(idadeInput);
+                            petAlterado.setIdade(idade);
+
+                        } catch (IdadeInvalidaException e) {
+                            System.out.println(e.getMessage() + "\n");
+                            continue;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Idade inválida! Apenas números são permitidos.\n");
+                            continue;
+                        }
+                        break;
+                    }
+                }
+                case 3 -> {
+                    while (true) {
+                        try {
+                            String pesoInput = consoleView.exibirPergunta("Novo PESO do pet: ");
+                            Double peso = petValidator.validaPeso(pesoInput);
+                            petAlterado.setPeso(peso);
+
+                        } catch (PesoInvalidoException e) {
+                            System.out.println(e.getMessage() + "\n");
+                            continue;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Peso inválido! Apenas números são permitidos.\n");
+                            continue;
+                        }
+                        break;
+                    }
+                }
+                case 4 -> {
+                    while (true) {
+                        try {
+                            String racaInput = consoleView.exibirPergunta("Nova RAÇA do pet: ");
+                            String raca = petValidator.validaRaca(racaInput);
+                            petAlterado.setRaca(raca);
+
+                        } catch (RacaInvalidaException e) {
+                            System.out.println(e.getMessage() + "\n");
+                            continue;
+                        }
+                        break;
+                    }
+                }
+                case 5 -> {
+                    while (true) {
+                        try {
+                            String numeroInput = consoleView.exibirPergunta("Novo NÚMERO de endereco do pet: ");
+                            Integer numero = petValidator.validaNumero(numeroInput);
+                            petAlterado.getEndereco().setNumero(numero);
+
+                            String cidadeInput = consoleView.exibirPergunta("Nova CIDADE do pet: ");
+                            String cidade = petValidator.validaCidade(cidadeInput);
+                            petAlterado.getEndereco().setCidade(cidade);
+
+                            String ruaInput = consoleView.exibirPergunta("Nova RUA do pet: ");
+                            String rua = petValidator.validaRua(ruaInput);
+                            petAlterado.getEndereco().setRua(rua);
+
+                        } catch (EnderecoInvalidoException e) {
+                            System.out.println(e.getMessage() + "\n");
+                            continue;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Numéro Inválido! Apenas dígitos são permitidos.\n");
+                            continue;
+                        }
+                        break;
+                    }
+                }
+            }
+            op = consoleView.exibirMenuAlteraPet();
+        }
+        return petAlterado;
+    }
 }
+
+

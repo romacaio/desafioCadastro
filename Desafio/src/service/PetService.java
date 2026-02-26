@@ -32,12 +32,11 @@ public class PetService {
     }
 
     public List<Pet> buscaPet(CriterioBusca criterioBusca) throws FileNotFoundException {
-
         List<Pet> petsCadastrados = petRepository.carregarPetsFile();
         filtrarPorTipo(petsCadastrados, criterioBusca.getTipoPet());
-        int contPetsIncial = petsCadastrados.size();
 
-        if (criterioBusca.getNomeOuSobrenome() != null) filtrarPorNome(petsCadastrados, criterioBusca.getNomeOuSobrenome());
+        if (criterioBusca.getNomeOuSobrenome() != null)
+            filtrarPorNome(petsCadastrados, criterioBusca.getNomeOuSobrenome());
         if (criterioBusca.getPeso() != null) filtrarPorPeso(petsCadastrados, criterioBusca.getPeso());
         if (criterioBusca.getSexo() != null) filtrarPorSexo(petsCadastrados, criterioBusca.getSexo());
         if (criterioBusca.getIdade() != null) filtrarPorIdade(petsCadastrados, criterioBusca.getIdade());
@@ -77,7 +76,7 @@ public class PetService {
 
         for (Pet pet : petsCadastrados) {
             idade = analisaNaoInformado(String.valueOf(pet.getIdade()));
-            if (idade.equalsIgnoreCase(idadeBusca)) {
+            if (!idade.equalsIgnoreCase(idadeBusca)) {
                 petsRemove.add(pet);
             }
         }

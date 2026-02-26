@@ -119,9 +119,29 @@ public class ConsoleView {
         }
     }
 
-    public int exibirMenuDelete() {
-        System.out.println("## Deleta Pet ##");
-        System.out.println("Digite o número do Pet que deseja deletar: ");
+    public int exibirMenuSelecionaPet() {
+        System.out.println("Digite o número do Pet que deseja Selecionar: ");
+
+        String op = sc.nextLine();
+        if (op.isBlank()) {
+            return -1;
+        }
+        try {
+            return Integer.parseInt(op);
+
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public int exibirMenuAlteraPet() {
+        System.out.println("[1] Nome");
+        System.out.println("[2] Idade");
+        System.out.println("[3] Peso");
+        System.out.println("[4] Raça");
+        System.out.println("[5] Endereço");
+        System.out.println("[6] Finalizar alterações");
+        System.out.println("Selecione qual campo do pet deseja ser alterado:");
 
         String op = sc.nextLine();
         if (op.isBlank()) {

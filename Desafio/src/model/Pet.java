@@ -19,14 +19,16 @@ public class Pet {
 
     }
 
-    public Pet(String nome, Tipo tipo, Sexo sexo, Endereco endereco, Double idade, Double peso, String raca) {
-        this.nome = nome;
-        this.tipo = tipo;
-        this.sexo = sexo;
-        this.endereco = endereco;
-        this.idade = idade;
-        this.peso = peso;
-        this.raca = raca;
+    // construtor de cópia
+    public Pet(Pet pet) {
+        this.nome = pet.getNome();
+        this.tipo = pet.getTipo();
+        this.sexo = pet.getSexo();
+        this.endereco = pet.getEndereco();
+        this.idade = pet.getIdade();
+        this.peso = pet.getPeso();
+        this.raca = pet.getRaca();
+        this.dateCadastro = pet.getDateCadastro();
     }
 
     @Override
@@ -37,6 +39,7 @@ public class Pet {
         if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
+
         Pet pet = (Pet) o;
         return Objects.equals(this.nome, pet.getNome()) &&
                 Objects.equals(this.tipo, pet.getTipo()) &&
@@ -117,10 +120,8 @@ public class Pet {
         if (idade > 1.0) {
             return idade + " anos";
         }
-
         return idade + " meses";
     }
-
 
     @Override
     public String toString() {

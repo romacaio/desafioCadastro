@@ -38,7 +38,7 @@ public class PetValidator {
         return peso;
     }
 
-    public Integer ValidaNumero(String numeroString) {
+    public Integer validaNumero(String numeroString) {
         if (numeroString.isBlank()) {
             return null;
         }
